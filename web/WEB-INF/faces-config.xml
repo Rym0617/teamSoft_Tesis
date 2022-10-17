@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+    <application>
+        <locale-config>
+            <default-locale>es-ES</default-locale>
+            <supported-locale>en-US</supported-locale>
+        </locale-config>
+
+        <message-bundle>/Bundle</message-bundle>
+
+        <resource-bundle>
+            <base-name>/Bundle</base-name>
+            <var>bundle</var>
+        </resource-bundle>
+    </application>
+
+    <application>
+        <el-resolver>
+            org.primefaces.application.exceptionhandler.PrimeExceptionHandlerELResolver
+        </el-resolver>
+    </application>
+
+    <component>
+        <component-type>org.primefaces.component.UltimaMenu</component-type>
+        <component-class>org.primefaces.ultima.component.menu.UltimaMenu</component-class>
+    </component>
+
+    <render-kit>
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.UltimaMenuRenderer</renderer-type>
+            <renderer-class>org.primefaces.ultima.component.menu.UltimaMenuRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+
+
+    <factory>
+        <exception-handler-factory>
+            org.primefaces.application.exceptionhandler.PrimeExceptionHandlerFactory
+        </exception-handler-factory>
+    </factory>
+
+    <!--Reglas de navegación-->
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+
+        <!--Administrar competencias-->
+        <navigation-case>
+            <from-outcome>to-competence-list</from-outcome>
+            <to-view-id>/manageCompetences/competence/List.xhtml</to-view-id>
+        </navigation-case>
+        <!--Administrar roless -->
+        <navigation-case>
+            <from-outcome>to-role-list</from-outcome>
+            <to-view-id>/manageRoles/role/List.xhtml</to-view-id>
+        </navigation-case>
+        <!--Administrar personas-->
+        <navigation-case>
+            <from-outcome>to-person-list</from-outcome>
+            <to-view-id>/person/index.xhtml</to-view-id>
+        </navigation-case>
+        <!--Administrar proyectos-->
+        <navigation-case>
+            <from-outcome>to-project-list</from-outcome>
+            <to-view-id>/manageProjects/project/List.xhtml</to-view-id>
+        </navigation-case>
+
+        <!--landing page-->
+        <navigation-case>
+            <from-outcome>to-index</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+
+        <!--Crear competenceType-->
+        <navigation-case>
+            <from-outcome>competence-create</from-outcome>
+            <to-view-id>/manageCompetences/competence/Create.xhtml</to-view-id>
+        </navigation-case>
+        <!--Editar competenceType-->
+        <navigation-case>
+            <from-outcome>competence-edit</from-outcome>
+            <to-view-id>/manageCompetences/competence/Edit.xhtml</to-view-id>
+        </navigation-case>
+
+        <!--Crear rol-->
+        <navigation-case>
+            <from-outcome>role-create</from-outcome>
+            <to-view-id>/manageRoles/role/Create.xhtml</to-view-id>
+        </navigation-case>
+        <!--Editar rol-->
+        <navigation-case>
+            <from-outcome>role-edit</from-outcome>
+            <to-view-id>/manageRoles/role/Edit.xhtml</to-view-id>
+        </navigation-case>
+
+
+        <!--Crear persona-->
+        <navigation-case>
+            <from-outcome>person-create</from-outcome>
+            <to-view-id>/person/worker/Create.xhtml</to-view-id>
+        </navigation-case>
+        <!--Editar persona-->
+        <navigation-case>
+            <from-outcome>person-edit</from-outcome>
+            <to-view-id>/person/worker/Edit.xhtml</to-view-id>
+        </navigation-case>
+
+
+        <!--Crear/Editar un proyecto (para que funcione hay que cambiar la lista en step 2 por un checkBox menu como en el crear homogeneos)-->
+        <navigation-case>
+            <from-outcome>create-one-project</from-outcome>
+            <to-view-id>/manageProjects/project/CreateOne.xhtml</to-view-id>
+        </navigation-case>
+        <!--Crear proyectos homogeneos-->
+        <navigation-case>
+            <from-outcome>create-homogeneous-projects</from-outcome>
+            <to-view-id>/manageProjects/project/CreateMany.xhtml</to-view-id>
+        </navigation-case>
+
+        <!--solo editar datos generales de un proyecto (no implementado)-->
+        <navigation-case>
+            <from-outcome>edit-project</from-outcome>
+            <to-view-id>/manageProjects/project/Edit.xhtml</to-view-id>
+        </navigation-case>
+
+        <!--importar-->
+        <navigation-case>
+            <from-outcome>import</from-outcome>
+            <to-view-id>/import/import.xhtml</to-view-id>
+        </navigation-case>
+
+        <!--configuración de la importación-->
+        <navigation-case>
+            <from-outcome>config</from-outcome>
+            <to-view-id>/import/config.xhtml</to-view-id>
+        </navigation-case>
+        
+         <!--Seleccionar proyecto a finalizar-->
+         <navigation-case> 
+            <from-outcome>finalizeProject</from-outcome> 
+            <to-view-id>/closeProject/finalizeProject</to-view-id> 
+        </navigation-case>         
+        <!--Seleccionar proyecto a cerrar-->
+         <navigation-case> 
+            <from-outcome>closeProject</from-outcome> 
+            <to-view-id>/closeProject/closeProject</to-view-id> 
+        </navigation-case>         
+         <!--Seleccionar persona a evaluar mientras se finaliza/cierra el proyecto-->
+         <navigation-case> 
+            <from-outcome>select-member-evaluation</from-outcome> 
+            <to-view-id>/closeProject/selectMemberToEvaluate</to-view-id> 
+        </navigation-case>         
+         <!--Evaluacion de una persona mientras se finaliza/cierra el proyecto-->
+         <navigation-case> 
+            <from-outcome>member-evaluation</from-outcome> 
+            <to-view-id>/closeProject/memberEvaluation</to-view-id> 
+        </navigation-case>        
+       <!-- Salvar Evaluacion de una persona mientras se finaliza/cierra el proyecto-->
+         <navigation-case> 
+            <from-outcome>save-member-evaluation</from-outcome> 
+            <to-view-id>/memberEvaluation/selectMemberToEvaluate</to-view-id> 
+        </navigation-case>  
+        
+    </navigation-rule>
+
+</faces-config>

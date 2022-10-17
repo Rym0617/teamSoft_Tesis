@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:form id="formConfiguracion">
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+                <p:fieldset id="flstConf">
+                    <br/>
+                    <div class="ui-g-12">
+                        <div class="ui-g-6">
+                            <p:outputLabel style="padding-right: 20px"
+                                           value="#{bundle.select_project_to_config}"/>
+                            <p:selectCheckboxMenu style="margin-bottom: 10px" id="projectMenu"
+                                                  value="#{tF_StepOneController.projectIdList}" label="#{bundle.projects_menu}"
+                                                  filter="true" filterMatchMode="contains" panelStyle="width:250px">
+
+                                <f:selectItems value="#{projectController.itemsAvailableSelectOne}" var="projects"
+                                               itemValue="#{projects.id}"
+                                               itemLabel="#{projects.projectName}"/>
+                                <p:ajax event="change" update="projectGroupsDT"
+                                        listener="#{tF_StepOneController.changeClear()}"/>
+                                <p:ajax event="toggleSelect" update="projectGroupsDT"
+                                        listener="#{tF_StepOneController.changeClear()}"/>
+                            </p:selectCheckboxMenu>
+                        </div>
+
+                        <div class="ui-g-6">
+                            <p:outputLabel style="padding-right: 20px"
+                                           value="#{bundle.select_groups_conf}"/>
+                            <p:selectCheckboxMenu style="margin-bottom: 20px" id="groupMenu"
+                                                  value="#{tF_StepOneController.groupIdList}" label="#{bundle.groups_menu}"
+                                                  filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                <f:selectItems value="#{personGroupController.items}" var="groups"
+                                               itemLabel="#{groups.name}" itemValue="#{groups.id}"/>
+                                <p:ajax event="change" update="projectGroupsDT"/>
+                                <p:ajax event="toggleSelect" update="projectGroupsDT"/>
+                            </p:selectCheckboxMenu>
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <div class="ui-g-12">
+                        <div class="ui-g-6">
+
+                            <p:outputPanel style="margin-bottom:10px" layout="grid">
+                                <p:selectOneRadio id="conf" value="#{tF_StepOneController.confRole}" layout="custom">
+                                    <f:selectItem itemLabel="#{bundle.maxim_number_roles_conf}" itemValue="custom"/>
+                                    <f:selectItem itemLabel="#{bundle.possibles_roles_conf}" itemValue="all"/>
+                                    <p:ajax process="@this"/>
+                                </p:selectOneRadio>
+
+                                <p:fieldset legend="#{bundle.indicate_max_cant_roles_conf}">
+                                    <div>
+                                        <p:radioButton id="confA" for="conf" itemIndex="0"/>
+                                        <p:outputLabel for="confA" value="#{bundle.maxim_number_roles_conf}"/>
+                                        <p:spinner id="minMax" value="#{tF_StepOneController.roleMax}" min="1"
+                                                   max="#{roleController.getItemsAvailableSelectOne().size()}"/>
+                                    </div>
+                                    <br/>
+                                    <div>
+                                        <p:radioButton id="confB" for="conf" itemIndex="1"/>
+                                        <p:outputLabel for="confB" value="#{bundle.possibles_roles_conf}"/>
+                                        <p:outputLabel value=""/>
+                                    </div>
+                                </p:fieldset>
+                                <br/>
+                            </p:outputPanel>
+                            <!--================================================================================================-->
+                            <p:outputPanel styleClass="ui-noborder" layout="grid">
+                                    <p:selectBooleanCheckbox id="enableMin"
+                                                             value="#{tF_StepOneController.enableCantMin}">
+                                        <p:ajax process="@this"/>
+                                    </p:selectBooleanCheckbox>
+
+                                    <p:outputLabel for="enableMin" value="#{bundle.cant_min_roles_conf}"/>
+                                    <p:spinner id="cantMin" value="#{tF_StepOneController.roleMin}" min="1"
+                                               max="3">
+                                        <p:ajax process="@this"/>
+                                    </p:spinner>
+                            </p:outputPanel>
+                            <!--================================================================================================-->
+                            <div>
+                                <p:outputPanel id="panelConf" style="margin-bottom:10px" layout="grid">
+                                    <p:selectBooleanCheckbox id="confOne"
+                                                             value="#{tF_StepOneController.onlyOneProject}"/>
+                                    <p:outputLabel for="confOne" value="#{bundle.each_worker_to_one_project}"/>
+                                    <br/>
+                                    <p:selectBooleanCheckbox id="confAllGroup"
+                                                             value="#{tF_StepOneController.confAllGroup}">
+                                        <p:ajax event="change" update="formatsSelectPG"/>
+                                    </p:selectBooleanCheckbox>
+                                    <p:outputLabel for="confAllGroup"
+                                                   value="#{bundle.assign_all_staff}"/>
+                                    <br/>
+                                    <p:selectBooleanCheckbox id="bossAssigned"
+                                                             value="#{tF_StepOneController.bossNeedToBeAssigned}">
+                                        <p:ajax event="change" process="@this"/>
+                                    </p:selectBooleanCheckbox>
+                                    <p:outputLabel for="bossAssigned"
+                                                   value="#{bundle.leader_more_one_role}"/>
+                                </p:outputPanel>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-6">
+                            <!-- Si la cantidad máxima de roles es 1 esto no se muestra-->
+                            <p:fieldset legend="#{bundle.team_formation_method}">
+
+                                <p:outputLabel value="#{bundle.assign_all_chief_firts}"/>
+                                <div class="ui-g-12">
+                                    <p:radioButton id="confFormMode1" for="confFormMode" itemIndex="0"/>
+                                    <p:outputLabel for="confFormMode1" value="#{bundle.build_team_secuentialy}"/>
+                                </div>
+                                <div class="ui-g-12">
+                                    <p:radioButton id="confFormMode2" for="confFormMode" itemIndex="1"/>
+                                    <p:outputLabel for="confFormMode2" value="#{bundle.build_team_simultaneously}"/>
+                                </div>
+                                <br/>
+                                <p:outputLabel value="#{bundle.not_assign_chief_first}"/>
+                                <div class="ui-g-12">
+                                    <p:radioButton id="confFormMode3" for="confFormMode" itemIndex="2"/>
+                                    <p:outputLabel for="confFormMode3" value="#{bundle.build_team_secuentialy}"/>
+                                </div>
+                                <div class="ui-g-12">
+                                    <p:radioButton id="confFormMode4" for="confFormMode" itemIndex="3"/>
+                                    <p:outputLabel for="confFormMode4" value="#{bundle.build_team_simultaneously}"/>
+                                </div>
+
+                                <div class="ui-g-12">
+                                    <p:selectOneRadio id="confFormMode" value="#{tF_StepOneController.confFormMode}"
+                                                      layout="custom">
+                                        <f:selectItem itemLabel="#{bundle.build_team_secuentialy}" itemValue="1"/>
+                                        <f:selectItem itemLabel="#{bundle.build_team_simultaneously}" itemValue="2"/>
+                                        <f:selectItem itemLabel="#{bundle.build_team_secuentialy}" itemValue="3"/>
+                                        <f:selectItem itemLabel="#{bundle.build_team_simultaneously}" itemValue="4"/>
+                                    </p:selectOneRadio>
+                                </div>
+                            </p:fieldset>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="ui-g-6">
+                        <h:panelGroup id="formatsSelectPG">
+                            <p:dataTable rendered="#{tF_StepOneController.confAllGroup}" id="projectGroupsDT"
+                                         var="selProjects" value="#{tF_StepOneController.ppg}" style="margin-bottom:0">
+                                <f:facet name="header">
+                                    <p:outputLabel id="tableHeader"
+                                                   value="#{bundle.total_number_of_workers} #{tF_StepOneController.groupListAmount}"/>
+                                </f:facet>
+                                <p:column headerText="#{bundle.project_name}">
+                                    <h:outputText value="#{selProjects.proj.projectName}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle.number_of_workers}">
+                                    <p:spinner id="cperson" value="#{selProjects.cant}" min="0"
+                                               max="#{tF_StepOneController.groupListAmount}">
+                                        <p:ajax event="change" process="cperson" update="cperson"/>
+                                    </p:spinner>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGroup>
+                    </div>
+
+                </p:fieldset>
+            </div>
+        </div>
+    </h:form>
+</ui:composition>

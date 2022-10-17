@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog id="ConflictIndexViewDlg" widgetVar="ConflictIndexViewDialog" modal="true" resizable="false"
+              appendTo="@(body)" header="#{bundle.ViewConflictIndexTitle}">
+        <h:form id="ConflictIndexViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{conflictIndexController.selected != null}">
+                    <h:outputText value="#{bundle.ViewConflictIndexLabel_description}"/>
+                    <h:outputText value="#{conflictIndexController.selected.description}"
+                                  title="#{bundle.ViewConflictIndexTitle_description}"/>
+                    <h:outputText value="#{bundle.ViewConflictIndexLabel_weight}"/>
+                    <h:outputText value="#{conflictIndexController.selected.weight}"
+                                  title="#{bundle.ViewConflictIndexTitle_weight}"/>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" value="#{bundle.Close}" onclick="ConflictIndexViewDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

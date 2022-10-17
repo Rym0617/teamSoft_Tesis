@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog closable="false" id="CycleCreateDlg" widgetVar="CycleCreateDialog" modal="true" resizable="false"
+              appendTo="@(body)" header="#{bundle.CreateCycleTitle}">
+        <h:form id="CycleCreateForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{cycleController.selected != null}">
+                    <p:outputLabel value="#{bundle.CreateCycleLabel_id}" for="id"/>
+                    <p:inputText id="id" value="#{cycleController.selected.id}" title="#{bundle.CreateCycleTitle_id}"
+                                 required="true" requiredMessage="#{bundle.CreateCycleRequiredMessage_id}"/>
+                    <p:outputLabel value="#{bundle.CreateCycleLabel_beginDate}" for="beginDate"/>
+                    <p:calendar readonlyInput="true" placeholder="dd-mm-yyyy" effect="drop" pattern="dd/MM/yyyy"
+                                navigator="true" id="beginDate" value="#{cycleController.selected.beginDate}"
+                                title="#{bundle.EditCycleTitle_beginDate}" required="true"
+                                requiredMessage="#{bundle.EditCycleRequiredMessage_beginDate}"/>
+                    <p:outputLabel value="#{bundle.CreateCycleLabel_endDate}" for="endDate"/>
+                    <p:calendar readonlyInput="true" placeholder="dd-mm-yyyy" effect="drop" pattern="dd/MM/yyyy"
+                                navigator="true" id="endDate" value="#{cycleController.selected.endDate}"
+                                title="#{bundle.EditCycleTitle_endDate}"/>
+                    <p:outputLabel value="#{bundle.CreateCycleLabel_projectFk}" for="projectFk"/>
+                    <p:selectOneMenu effect="clip" id="projectFk" value="#{cycleController.selected.projectFk}">
+                        <f:selectItems value="#{projectController.itemsAvailableSelectOne}"
+                                       var="projectFkItem"
+                                       itemValue="#{projectFkItem}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" actionListener="#{cycleController.create}" value="#{bundle.Save}"
+                                 update="display,:CycleListForm:datalist,:growl"
+                                 oncomplete="handleSubmit(args,'CycleCreateDialog');"/>
+                <p:commandButton class="z-depth-1" value="#{bundle.Cancel}" onclick="CycleCreateDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

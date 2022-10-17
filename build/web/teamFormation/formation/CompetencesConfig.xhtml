@@ -1,0 +1,228 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="ui-fluid">
+                <div class="ui-inputgroup ui-g-4">
+                    <p:selectBooleanCheckbox id="takeCompetences2" value="#{tF_StepThreeController.takeCompetences}">
+                        <f:ajax render="@form"/>
+                    </p:selectBooleanCheckbox>
+                    <p:outputLabel for="takeCompetences2" value="#{bundle.teamCompetencesOption}"/>
+                </div>
+                <div class="ui-g-2">
+                    <p:spinner id="competenceWeight2" value="#{tF_StepThreeController.competenceWeight}" min="0" max="1"
+                               stepFactor="0.01" disabled="#{not tF_StepThreeController.takeCompetences}"
+                               rendered="#{tF_StepThreeController.mostrarPesos}">
+                        <p:ajax update="BalanceCompetences2,competenceWeight2,#{p:component('competenceWeightLabel2')}"/>
+                    </p:spinner>
+                </div>
+                <div class="ui-g-4">
+                    <div class="ui-inputgroup">
+                        <p:selectBooleanCheckbox id="BalanceCompetences2"
+                                                 disabled="#{not tF_StepThreeController.takeCompetences and !tF_StepThreeController.haveAnySenseToBalanceObjetiveFunction()}"
+                                                 value="#{tF_StepThreeController.balanceCompetences}">
+                            <f:ajax render="@form"/>
+                        </p:selectBooleanCheckbox>
+                        <p:outputLabel for="BalanceCompetences2" value="#{bundle.balance_between_teams}"/>
+                    </div>
+                </div>
+                <div class="ui-g-2">
+                    <p:spinner id="balanceCompetenceWeight2" value="#{tF_StepThreeController.balanceCompetenceWeight}"
+                               min="0" max="1"
+                               stepFactor="0.01" disabled="#{not tF_StepThreeController.balanceCompetences}"
+                               rendered="#{tF_StepThreeController.mostrarPesos}">
+                        <p:ajax update="balanceCompetenceWeight2,#{p:component('competenceWeightLabel2')}"/>
+                    </p:spinner>
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-3">
+                    <div>
+                        <p:selectBooleanCheckbox id="takeReq2"
+                                                 value="#{tF_StepThreeController.takeProjectRequirements}">
+                            <p:ajax update="project2,roles,#{p:component('takeCompetences2')},#{p:component('competenceWeight2')}"/>
+                        </p:selectBooleanCheckbox>
+                        <p:outputLabel for="takeReq2" value="#{bundle.competences_by_project}"/>
+                    </div>
+                    <br/>
+                </div>
+                <div class="ui-g-9">
+                    <p:fieldset>
+                        <h:outputText id="selectedRoleName"
+                                      value="#{bundle.projectBossRequisite} #{tF_StepThreeController.selectedRol.roleName}"/>
+                        <div class="ui-g-12">
+                            <div class="ui-g-3">
+                                <p:outputLabel for="project2" value="#{bundle.projectSelector}"/>
+                            </div>
+                            <div class="ui-g-9">
+                                <p:selectOneMenu disabled="#{!tF_StepThreeController.takeProjectRequirements}"
+                                                 effect="clip" id="project2"
+                                                 value="#{tF_StepThreeController.selectedProject}"
+                                                 converter="EntityConverter" filter="true" filterMatchMode="contains">
+                                    <f:selectItem itemLabel="#{bundle.selectOnePlaceHolder}"/>
+                                    <f:selectItems value="#{tF_StepThreeController.parametersTeam.projects}"
+                                                   var="projects"
+                                                   itemValue="#{projects}"
+                                                   itemLabel="#{projects.project.projectName}"/>
+                                    <p:ajax event="change"
+                                            listener="#{tF_StepThreeController.selectableRolesForProyect()}"
+                                            update="selectedRoleName,roles,#{p:component('tecCompTable2')},#{p:component('genCompTable2')}"/>
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="ui-g-3">
+                                <p:outputLabel for="roles" value="#{bundle.roles_menu}:"/>
+                            </div>
+                            <div class="ui-g-9">
+                                <p:selectOneMenu effect="clip"
+                                                 disabled="#{!tF_StepThreeController.takeProjectRequirements}"
+                                                 id="roles" value="#{tF_StepThreeController.selectedRol}" filter="true"
+                                                 filterMatchMode="contains">
+                                    <f:selectItem itemLabel="#{bundle.selectOnePlaceHolder}"/>
+                                    <f:selectItems value="#{tF_StepThreeController.selectableRoles}"
+                                                   var="rol"
+                                                   itemValue="#{rol}"
+                                                   itemLabel="#{rol.roleName}"/>
+                                    <p:ajax event="change"
+                                            listener="#{tF_StepThreeController.prepareProjectInCellEdit()}"
+                                            update="selectedRoleName,#{p:component('tecCompTable2')},#{p:component('genCompTable2')}"/>
+                                </p:selectOneMenu>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-12">
+                            <h:panelGroup id="competencesContent2">
+                                <br/>
+                                <div>
+                                    <p:dataTable id="tecCompTable2"
+                                                 var="techComp"
+                                                 value="#{tF_StepThreeController.techCompetences}"
+                                                 rows="5" paginator="true"
+                                                 class="z-depth-1"
+                                                 editable="true"
+                                                 editMode="cell"
+                                                 paginatorPosition="bottom">
+                                        <f:facet name="header">
+                                            #{bundle.projectTechnicalCompTH}
+                                        </f:facet>
+
+                                        <p:column headerText="#{bundle.projectCompNameCTH}">
+                                            <h:outputText value="#{techComp.competence.competitionName}"/>
+                                        </p:column>
+
+                                        <p:column headerText="#{bundle.projectCompLvlCH}">
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{techComp.minLevel.significance}"/>
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:selectOneMenu effect="clip" id="genCompMin2"
+                                                                     value="#{techComp.minLevel}" filter="true"
+                                                                     filterMatchMode="contains"
+                                                                     converter="EntityConverter">
+                                                        <f:selectItems
+                                                                value="#{levelsController.itemsAvailableSelectMany}"
+                                                                var="minLevel"
+                                                                itemValue="#{minLevel}"
+                                                                itemLabel="#{minLevel.significance}"/>
+                                                    </p:selectOneMenu>
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column headerText="#{bundle.projectCompImportanceCH}">
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{techComp.competenceImportance.significance}"/>
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:selectOneMenu effect="clip" id="genCompImp"
+                                                                     value="#{techComp.competenceImportance}"
+                                                                     filter="true" filterMatchMode="contains"
+                                                                     converter="EntityConverter">
+                                                        <f:selectItems
+                                                                value="#{competenceImportanceController.itemsAvailableSelectMany}"
+                                                                var="competenceImp"
+                                                                itemValue="#{competenceImp}"
+                                                                itemLabel="#{competenceImp.significance}"/>
+                                                    </p:selectOneMenu>
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+                                    </p:dataTable>
+
+                                    <p:dataTable id="genCompTable2"
+                                                 var="genComp"
+                                                 value="#{tF_StepThreeController.genCompetences}"
+                                                 rows="5"
+                                                 paginator="true"
+                                                 class="z-depth-1"
+                                                 editable="true"
+                                                 editMode="cell"
+                                                 paginatorPosition="bottom">
+                                        <f:facet name="header">
+                                            #{bundle.projectGenericCompTH}
+                                        </f:facet>
+
+                                        <p:column headerText="#{bundle.projectCompNameCTH}">
+                                            <h:outputText value="#{genComp.competence.competitionName}"/>
+                                        </p:column>
+
+                                        <p:column headerText="#{bundle.projectCompLvlCH}">
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{genComp.minLevel.significance}"/>
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:selectOneMenu effect="clip" id="genCompMin"
+                                                                     value="#{genComp.minLevel}" filter="true"
+                                                                     filterMatchMode="contains"
+                                                                     converter="EntityConverter">
+                                                        <f:selectItems
+                                                                value="#{levelsController.itemsAvailableSelectMany}"
+                                                                var="minLevel"
+                                                                itemValue="#{minLevel}"
+                                                                itemLabel="#{minLevel.significance}"/>
+                                                    </p:selectOneMenu>
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column headerText="#{bundle.projectCompImportanceCH}">
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{genComp.competenceImportance.significance}"/>
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:selectOneMenu effect="clip" id="techCompImp"
+                                                                     value="#{genComp.competenceImportance}"
+                                                                     filter="true" filterMatchMode="contains"
+                                                                     converter="EntityConverter">
+                                                        <f:selectItems
+                                                                value="#{competenceImportanceController.itemsAvailableSelectMany}"
+                                                                var="competenceImp"
+                                                                itemValue="#{competenceImp}"
+                                                                itemLabel="#{competenceImp.significance}"/>
+                                                    </p:selectOneMenu>
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+                                    </p:dataTable>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                    </p:fieldset>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</ui:composition>

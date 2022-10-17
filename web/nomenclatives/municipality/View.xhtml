@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog id="MunicipalityViewDlg" widgetVar="MunicipalityViewDialog" modal="true" resizable="false"
+              appendTo="@(body)" header="#{bundle.ViewMunicipalityTitle}">
+        <h:form id="MunicipalityViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{municipalityController.selected != null}">
+                    <h:outputText value="#{bundle.ViewMunicipalityLabel_name}"/>
+                    <h:outputText value="#{municipalityController.selected.name}"
+                                  title="#{bundle.ViewMunicipalityTitle_name}"/>
+                    <h:outputText value="#{bundle.ViewMunicipalityLabel_countyFk}"/>
+                    <h:outputText value="#{municipalityController.selected.countyFk}"
+                                  title="#{bundle.ViewMunicipalityTitle_countyFk}"/>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" value="#{bundle.Close}" onclick="MunicipalityViewDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

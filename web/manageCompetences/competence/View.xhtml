@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog closable="false" id="CompetenceViewDlg" widgetVar="CompetenceViewDialog" modal="true" resizable="false"
+              appendTo="@(body)" header="#{bundle.ViewCompetenceTitle}">
+        <h:form id="CompetenceViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{competenceController.selected != null}">
+                    <h:outputText value="#{bundle.ViewCompetenceLabel_id}"/>
+                    <h:outputText value="#{competenceController.selected.id}" title="#{bundle.ViewCompetenceTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewCompetenceLabel_competitionName}"/>
+                    <h:outputText value="#{competenceController.selected.competitionName}"
+                                  title="#{bundle.ViewCompetenceTitle_competitionName}"/>
+                    <h:outputText value="#{bundle.ViewCompetenceLabel_description}"/>
+                    <h:outputText value="#{competenceController.selected.description}"
+                                  title="#{bundle.ViewCompetenceTitle_description}"/>
+                    <h:outputText value="#{bundle.ViewCompetenceLabel_technical}"/>
+                    <p:selectBooleanCheckbox value="#{competenceController.selected.technical}" disabled="true"/>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" value="#{bundle.Close}" onclick="CompetenceViewDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

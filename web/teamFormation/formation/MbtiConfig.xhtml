@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-4 ui-inputgroup">
+                <div>
+                    <p:selectBooleanCheckbox id="takeMbtiTypes" value="#{tF_StepThreeController.takeMbtiTypes}">
+                        <f:ajax render="@form"/>
+                    </p:selectBooleanCheckbox>
+                </div>
+                <div>
+                    <p:outputLabel for="takeMbtiTypes" value="#{bundle.maximize_mbti}"/>
+                </div>
+            </div>
+            <div class="ui-g-2">
+                <p:spinner id="mbtiWeight" value="#{tF_StepThreeController.mbtiWeight}" min="0" max="1"
+                           stepFactor="0.01"
+                           disabled="#{!tF_StepThreeController.takeMbtiTypes}"
+                           rendered="#{tF_StepThreeController.mostrarPesos}">
+                    <p:ajax update="#{p:component('mbtiLabel2')}"/>
+                </p:spinner>
+            </div>
+            <div class="ui-g-4">
+                <p:selectBooleanCheckbox id="BalanceMbtiTypes" value="#{tF_StepThreeController.balanceMbtiTypes}"
+                                         disabled="#{!tF_StepThreeController.takeMbtiTypes and !tF_StepThreeController.haveAnySenseToBalanceObjetiveFunction()}">
+                    <p:ajax update="balanceMbtiTypesWeight"/>
+                    <f:ajax render="@form"/>
+                </p:selectBooleanCheckbox>
+                <p:outputLabel for="BalanceMbtiTypes" value="#{bundle.balance_between_teams}"/>
+            </div>
+            <div class="ui-g-2">
+                <p:spinner id="balanceMbtiTypesWeight" value="#{tF_StepThreeController.balanceMbtiTypesWeight}" min="0"
+                           max="1" stepFactor="0.01"
+                           disabled="#{!tF_StepThreeController.balanceMbtiTypes}"
+                           rendered="#{tF_StepThreeController.mostrarPesos}">
+                    <p:ajax update="#{p:component('mbtiLabel2')}"/>
+                </p:spinner>
+            </div>
+
+        </div>
+    </div>
+</ui:composition>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog id="ClientEntityViewDlg" widgetVar="ClientEntityViewDialog" modal="true" resizable="false"
+              appendTo="@(body)" header="#{bundle.ViewClientEntityTitle}">
+        <h:form id="ClientEntityViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{clientEntityController.selected != null}">
+                    <h:outputText value="#{bundle.ViewClientEntityLabel_entityName}"/>
+                    <h:outputText value="#{clientEntityController.selected.entityName}"
+                                  title="#{bundle.ViewClientEntityTitle_entityName}"/>
+                    <h:outputText value="#{bundle.ViewClientEntityLabel_address}"/>
+                    <h:outputText value="#{clientEntityController.selected.address}"
+                                  title="#{bundle.ViewClientEntityTitle_address}"/>
+                    <h:outputText value="#{bundle.ViewClientEntityLabel_phone}"/>
+                    <h:outputText value="#{clientEntityController.selected.phone}"
+                                  title="#{bundle.ViewClientEntityTitle_phone}"/>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" value="#{bundle.Close}" onclick="ClientEntityViewDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

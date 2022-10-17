@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+    <ui:define name="title">
+        <h:outputText value="#{bundle.assignChiefTitle}" />
+    </ui:define>
+
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+            <div class="ui-g-11">
+                <p:panel id="basic" header="#{bundle.solutionConsirations}" style="margin-bottom:20px">
+                    <p:selectOneRadio id="solutionOption" value="#{tF_StepThreeController.solutionMethod}"
+                                      layout="responsive" columns="3">
+                        <f:selectItem itemLabel="#{bundle.ponderar_factores}" itemValue="PONDERAR"/>
+                        <f:selectItem itemLabel="#{bundle.equal_priority}" itemValue="IGUALAR"/>
+                        <f:selectItem itemLabel="#{bundle.give_more_priority}" itemValue="PRIORIZAR" itemDisabled="true"/>
+                        <p:ajax event="change" update="@form" listener="#{tF_StepThreeController.hideWeights()}"/>
+                    </p:selectOneRadio>
+
+                    <f:facet name="footer">
+                        <p:outputLabel for="solutionWayOneMenu" value="#{bundle.solutionWay}"/>
+                        <p:spinner id="solutionWayOneMenu" value="#{tF_StepThreeController.solutionWay}" min="1"
+                                   max="5"/>
+                    </f:facet>
+
+                </p:panel>
+                <p:tabView id="tabView" activeIndex="#{tF_StepThreeController.activeIndex}">
+                    <p:ajax event="tabChange" listener="#{tF_StepThreeController.onChange}"/>
+                    <p:tab id="tabCompetences"
+                           titleStyle="#{tF_StepThreeController.takeCompetences or tF_StepThreeController.balanceCompetences ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="competenceWeightLabel2"
+                                          style="#{tF_StepThreeController.takeCompetences or tF_StepThreeController.balanceCompetences ? 'color: white': null}">
+                                <p:graphicImage id="competencesTab" library="img" name="competences.jpg"
+                                                class="z-depth-1 tabImg"/>
+                                <h:outputText style="display:block" value="#{bundle.teamCompetencesTab}"/>
+
+                                <div>
+                                    <c:if test="#{tF_StepThreeController.takeCompetences}">
+                                        <h:outputText value="#{bundle.projectWeight} #{tF_StepThreeController.competenceWeight}"
+                                                      class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.takeCompetences}">
+                                        <h:outputText value="#{bundle.projectWeight} --" class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                </div>
+                                <div>
+                                    <c:if test="#{not tF_StepThreeController.balanceCompetences and not tF_StepThreeController.takeCompetences}">
+                                        <h:outputText value="#{bundle.balance} --" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.balanceCompetences and tF_StepThreeController.takeCompetences}">
+                                        <h:outputText value="#{bundle.balance}  #{bundle.noBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{tF_StepThreeController.balanceCompetences}">
+                                        <h:outputText value="#{bundle.balance}  #{bundle.yesBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                </div>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="CompetencesConfig.xhtml"/>
+                    </p:tab>
+                    <p:tab id="workersTab"
+                           titleStyle="#{tF_StepThreeController.takeWorkLoad or tF_StepThreeController.balanceWorkLoad ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="workLoadWeightLabel2"
+                                          style="#{tF_StepThreeController.takeWorkLoad or tF_StepThreeController.balanceWorkLoad ? 'color: white': null}">
+                                <p:graphicImage library="img" name="work.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText style="display:block" value="#{bundle.teamWorkLoadTab}"
+                                              class="blue-grey-text"/>
+
+
+                                <div>
+                                    <c:if test="#{tF_StepThreeController.takeWorkLoad}">
+                                        <h:outputText value="#{bundle.projectWeight} #{tF_StepThreeController.workLoadWeight}"
+                                                      class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.takeWorkLoad}">
+                                        <h:outputText value="#{bundle.projectWeight} --" class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                </div>
+                                <div>
+                                    <c:if test="#{not tF_StepThreeController.balanceWorkLoad and not tF_StepThreeController.takeWorkLoad}">
+                                        <h:outputText value="#{bundle.balance} --" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.balanceWorkLoad and tF_StepThreeController.takeWorkLoad}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.noBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{tF_StepThreeController.balanceWorkLoad}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.yesBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                </div>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="WorkloadConfig.xhtml"/>
+                    </p:tab>
+                    <p:tab id="synergyTab"
+                           titleStyle="#{tF_StepThreeController.takeSynergy or tF_StepThreeController.balanceSynergy ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="synergyWeightLabel2"
+                                          style="#{tF_StepThreeController.takeSynergy or tF_StepThreeController.balanceSynergy ? 'color: white': null}">
+                                <p:graphicImage library="img" name="sinergia.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText style="display:block" value="#{bundle.synergyTabHeader}"
+                                              class="blue-grey-text "/>
+                                <div>
+                                    <c:if test="#{tF_StepThreeController.takeSynergy}">
+                                        <h:outputText value="#{bundle.projectWeight} #{tF_StepThreeController.synergyWeight}"
+                                                      class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.takeSynergy}">
+                                        <h:outputText value="#{bundle.projectWeight} --" class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                </div>
+                                <div>
+                                    <c:if test="#{not tF_StepThreeController.balanceSynergy and not tF_StepThreeController.takeSynergy}">
+                                        <h:outputText value="#{bundle.balance} --" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.balanceSynergy and tF_StepThreeController.takeSynergy}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.noBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{tF_StepThreeController.balanceSynergy}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.yesBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                </div>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="Synergy.xhtml"/>
+                    </p:tab>
+                    <p:tab id="cdistanceTab"
+                           titleStyle="#{tF_StepThreeController.takeCostDistance or tF_StepThreeController.balanceCostDistance ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="costDistanceWeightLabel2"
+                                          style="#{tF_StepThreeController.takeCostDistance or tF_StepThreeController.balanceCostDistance ? 'color: white': null}">
+                                <p:graphicImage library="img" name="costDistance.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText style="display:block" value="#{bundle.teamCostDistanceTab}"
+                                              class="blue-grey-text "/>
+                                <div>
+                                    <c:if test="#{tF_StepThreeController.takeCostDistance}">
+                                        <h:outputText value="#{bundle.projectWeight} #{tF_StepThreeController.costDistanceWeight}"
+                                                      class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.takeCostDistance}">
+                                        <h:outputText value="#{bundle.projectWeight} --" class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                </div>
+                                <div>
+                                    <c:if test="#{not tF_StepThreeController.balanceCostDistance and not tF_StepThreeController.takeCostDistance}">
+                                        <h:outputText value="#{bundle.balance} --" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.balanceCostDistance and tF_StepThreeController.takeCostDistance}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.noBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{tF_StepThreeController.balanceCostDistance}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.yesBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                </div>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="CostdistanceConfig.xhtml"/>
+                    </p:tab>
+                    <p:tab id="interestTab"
+                           titleStyle="#{tF_StepThreeController.takeInterests or tF_StepThreeController.balanceInterests ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="interestWeightLabel2"
+                                          style="#{tF_StepThreeController.takeInterests or tF_StepThreeController.balanceInterests ? 'color: white': null}">
+                                <p:graphicImage library="img" name="interest.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText style="display:block" value="#{bundle.teamInterestTab}"
+                                              class="blue-grey-text "/>
+                                <div>
+                                    <c:if test="#{tF_StepThreeController.takeInterests}">
+                                        <h:outputText value="#{bundle.projectWeight} #{tF_StepThreeController.interestWeight}"
+                                                      class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.takeInterests}">
+                                        <h:outputText value="#{bundle.projectWeight} --" class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                </div>
+                                <div>
+                                    <c:if test="#{not tF_StepThreeController.balanceInterests and not tF_StepThreeController.takeInterests}">
+                                        <h:outputText value="#{bundle.balance} --" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.balanceInterests and tF_StepThreeController.takeInterests}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.noBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{tF_StepThreeController.balanceInterests}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.yesBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                </div>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="InterestConfig.xhtml"/>
+                    </p:tab>
+                    <p:tab id="psychoTab"
+                           titleStyle="#{tF_StepThreeController.takeBelbin or tF_StepThreeController.balanceBelbin ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="psychoLabel2"
+                                          style="#{tF_StepThreeController.takeBelbin or tF_StepThreeController.balanceBelbin ? 'color: white': null}">
+                                <p:graphicImage library="img" name="psycho.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText style="display:block" value="#{bundle.teamCharacteristicsTab}"
+                                              class="blue-grey-text "/>
+                                <div>
+                                    <c:if test="#{tF_StepThreeController.takeBelbin}">
+                                        <h:outputText value="#{bundle.projectWeight} #{tF_StepThreeController.belbinWeight}"
+                                                      class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.takeBelbin}">
+                                        <h:outputText value="#{bundle.projectWeight} --" class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                </div>
+                                <div>
+                                    <c:if test="#{not tF_StepThreeController.balanceBelbin and not tF_StepThreeController.takeBelbin}">
+                                        <h:outputText value="#{bundle.balance} --" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.balanceBelbin and tF_StepThreeController.takeBelbin}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.noBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{tF_StepThreeController.balanceBelbin}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.yesBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                </div>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="CharacteristicsConfig.xhtml"/>
+                    </p:tab>
+
+                    <p:tab id="projectInterestTab"
+                           titleStyle="#{tF_StepThreeController.takeProjectInterests or tF_StepThreeController.balanceInterests ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="projectInterestWeightLabel2"
+                                          style="#{tF_StepThreeController.takeProjectInterests or tF_StepThreeController.balanceInterests ? 'color: white': null}">
+                                <p:graphicImage library="img" name="interest.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText style="display:block" value="#{bundle.teamProjectInterestTab}"
+                                              class="blue-grey-text "/>
+                                <div>
+                                    <c:if test="#{tF_StepThreeController.takeProjectInterests}">
+                                        <h:outputText value="#{bundle.projectWeight} #{tF_StepThreeController.projectInterestWeight}"
+                                                      class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.takeProjectInterests}">
+                                        <h:outputText value="#{bundle.projectWeight} --" class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                </div>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="ProjectInterestConfig.xhtml"/>
+                    </p:tab>
+                    <p:tab id="mbtiTab"
+                           titleStyle="#{tF_StepThreeController.takeMbtiTypes ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="mbtiLabel2"
+                                          style="#{tF_StepThreeController.takeMbtiTypes ? 'color: white': null}">
+                                <p:graphicImage library="img" name="psycho.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText style="display:block" value="#{bundle.teamMbtiTab}"
+                                              class="blue-grey-text "/>
+
+                                <div>
+                                    <c:if test="#{tF_StepThreeController.takeMbtiTypes}">
+                                        <h:outputText
+                                                value="#{bundle.projectWeight} #{tF_StepThreeController.mbtiWeight}"
+                                                class="tabText"
+                                                rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.takeMbtiTypes}">
+                                        <h:outputText value="#{bundle.projectWeight} --" class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                </div>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="MbtiConfig.xhtml"/>
+                    </p:tab>
+                    <p:tab id="multiRoleTeamMembersTab"
+                           titleStyle="#{tF_StepThreeController.takeMultiroleTeamMembers or tF_StepThreeController.balanceMultiroleTeamMembers ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="multiRoleTeamMembersWeightLabel"
+                                          style="#{tF_StepThreeController.takeMultiroleTeamMembers or tF_StepThreeController.balanceMultiroleTeamMembers ? 'color: white': null}">
+                                <p:graphicImage library="img" name="multirole.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText style="display:block" value="Equipo multirol"
+                                              class="blue-grey-text "/>
+                                <div>
+                                    <c:if test="#{tF_StepThreeController.takeMultiroleTeamMembers}">
+                                        <h:outputText value="#{bundle.projectWeight} #{tF_StepThreeController.multiRoleTeamMembersWeight}"
+                                                      class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.takeMultiroleTeamMembers}">
+                                        <h:outputText value="#{bundle.projectWeight} --" class="tabText"
+                                                      rendered="#{tF_StepThreeController.mostrarPesos}"/>
+                                    </c:if>
+                                </div>
+                                <div>
+                                    <c:if test="#{not tF_StepThreeController.balanceMultiroleTeamMembers and not tF_StepThreeController.takeMultiroleTeamMembers}">
+                                        <h:outputText value="#{bundle.balance} --" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{not tF_StepThreeController.balanceMultiroleTeamMembers and tF_StepThreeController.takeMultiroleTeamMembers}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.noBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                    <c:if test="#{tF_StepThreeController.balanceMultiroleTeamMembers}">
+                                        <h:outputText value="#{bundle.balance} #{bundle.yesBooleanButton}" class="tabText"/>
+                                    </c:if>
+                                </div>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="MultiroleTeamMembersConfig.xhtml"/>
+                    </p:tab>
+                </p:tabView>
+            </div>
+            <br/>
+            <div class="ui-g-1">
+                <div class='container' style="background: #fff0">
+                    <p:commandButton id="sideBarBtnTeam" type="Button" icon="ui-icon-people-outline"
+                                     onmouseover="PF('sidebar3').show()" style="display: block; position: fixed;"
+                                     class="pulse-button"/>
+                </div>
+            </div>
+            <p:sidebar widgetVar="sidebar3" position="right" class="custom-side-bar">
+                <p:scrollPanel id="sidebar3Scroll" style="width: 200%; height:100%; margin: 2%" mode="native">
+                    <div class="ui-g-6">
+                        <p:panel id="proposal" header="#{bundle.teamProposalHeader}" style="margin-bottom:20px">
+                            <div>
+                                <p:commandButton class="z-depth-1" update="teamTree" process="@form"
+                                                
+                                                 value="#{bundle.assignChiefBtnProposal}">
+                                    <p:ajax process="@form" event="click" update="teamTree,:growl,assignMember"
+                                            listener="#{tF_StepThreeController.getTeam}"/>              
+                                </p:commandButton>                 
+                                <p:commandButton class="z-depth-1" actionListener="#{myPersonController.create()}"
+                                                 value="#{bundle.assignChiefBtnAssign}"/>
+                                
+                                  <p:commandButton id="assignMember" class="z-depth-1" type="Button"
+                                                   disabled="#{empty tF_StepThreeController.teamProposal}"
+                                             value="Fijar Persona">
+                                             <p:ajax process="@form" event="click" update="fixedMembers,:growl"
+                                                     listener="#{tF_StepThreeController.fixMember()}"/>
+                                           
+                                  </p:commandButton>
+                               
+                            </div>
+                            
+                            <div>
+                            <p:tree id="teamTree" value="#{tF_StepThreeController.teamProposal}"
+                                    selection="#{tF_StepThreeController.selectedNode}" var="prop" selectionMode="single"
+                                    animate="true" propagateSelectionUp="false">
+                             
+                                <p:treeNode id="rootNode" expandedIcon="fa fa-group" collapsedIcon="fa fa-user-plus">
+                                    <h:outputText value="#{prop}"/>
+                                </p:treeNode>
+                                <p:treeNode id="propNode" type="Prop" expandedIcon="fa fa-group"
+                                            collapsedIcon="fa fa-user-plus">
+                                    <h:outputText value="#{prop}"/>
+                                </p:treeNode>
+                                <p:treeNode id="projectNode" type="P" expandedIcon="fa fa-group"
+                                            collapsedIcon="fa fa-user-plus">
+                                    <h:outputText value="#{prop.projectName}"/>
+                                </p:treeNode>
+                                <p:treeNode id="projectEvaluation" type="E" expandedIcon="fa fa-group"
+                                            collapsedIcon="fa fa-user-plus">
+                                    <h:outputText value="#{prop}"/>
+                                </p:treeNode>
+                                <p:treeNode id="rolNode" type="R" expandedIcon="fa fa-group"
+                                            collapsedIcon="fa fa-user-plus">
+                                    <h:outputText value="#{prop.roleName}"/>
+                                </p:treeNode>
+                                <p:treeNode id="bossNode" type="W" expandedIcon="fa fa-user" collapsedIcon="fa fa-user" icon="">
+                                    <h:outputText value="#{prop.personName} #{prop.surName}"/>                                   
+                                </p:treeNode>
+                            </p:tree>
+                            </div>
+                            
+                            <div>
+                                <p:dataTable id="fixedMembers"
+                                             value="#{tF_StepThreeController.parametersTeam.fixedWorkers}"
+                                    editable="true"
+                                    selection="#{tF_StepThreeController.fixedWorkersList}"
+                                    style="margin-bottom:0"
+                                    var="fixedMembers"
+                                    rowKey="#{fixedMembers.boss.id}#{fixedMembers.project.id}#{fixedMembers.role.id}"
+                                >
+
+                                    <f:facet name="header">
+                                        <h:outputText value="Personas fijadas" />
+                                    </f:facet>
+
+                                    <p:ajax event="rowSelect" update="deleteMemberBttn"/>
+                                    <p:ajax event="rowUnselect" update="deleteMemberBttn"/>
+                                    <p:ajax event="rowSelectCheckbox" update="deleteMemberBttn"/>
+                                    <p:ajax event="rowUnselectCheckbox" update="deleteMemberBttn"/>
+                                    <p:ajax event="toggleSelect" update="deleteMemberBttn"/>
+
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+                                    <p:column headerText="Equipo">
+                                        #{fixedMembers.project.projectName}
+                                    </p:column>
+
+                                    <p:column headerText="Persona fijada">
+                                        #{fixedMembers.boss.personName}
+                                    </p:column>
+                                    
+                                     <p:column headerText="Rol">
+                                        #{fixedMembers.role.roleName}
+                                    </p:column>
+
+                                    <f:facet name="footer">
+                                        <p:commandButton class="z-depth-1" id="deleteMemberBttn" type="button"
+                                                         process="fixedMembers" icon="ui-icon-trash"
+                                                         value="#{bundle.quitSelectedCompetence}"
+                                                         disabled="#{empty tF_StepThreeController.fixedWorkersList}">
+                                            <p:ajax event="click" update="#{p:component('teamTree')},fixedMembers"
+                                                    listener="#{tF_StepThreeController.removeMemberFromFixedList_Listener()}"/>
+                                        </p:commandButton>
+                                    </f:facet>
+                                </p:dataTable>
+                            </div>
+                        </p:panel>
+                    </div>
+                </p:scrollPanel>
+            </p:sidebar>
+        </div>
+    </div>
+</ui:composition>

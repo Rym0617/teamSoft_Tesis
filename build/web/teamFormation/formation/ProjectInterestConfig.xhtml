@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-6 ui-inputgroup">
+                <div class="ui-g-8">
+                    <p:selectBooleanCheckbox id="takeProjectInterest"
+                                             value="#{tF_StepThreeController.takeProjectInterests}">
+                        <f:ajax render="@form"/>
+                    </p:selectBooleanCheckbox>
+                    <p:outputLabel for="takeProjectInterest" value="#{bundle.maximize_interest}"/>
+                </div>
+                <div class="ui-g-4">
+                    <p:spinner id="ProjectInterestWeight" value="#{tF_StepThreeController.projectInterestWeight}"
+                               min="0" max="1" stepFactor="0.01"
+                               disabled="#{!tF_StepThreeController.takeProjectInterests}"
+                               rendered="#{tF_StepThreeController.mostrarPesos}">
+                        <p:ajax update="#{p:component('projectInterestWeightLabel2')}"/>
+                    </p:spinner>
+                </div>
+            </div>
+
+            <div class="ui-g-4">
+                <p:selectBooleanCheckbox id="BalanceProjectInterests"
+                                         value="#{tF_StepThreeController.balanceProjectInterests}"
+                                         disabled="#{!tF_StepThreeController.takeProjectInterests and !tF_StepThreeController.haveAnySenseToBalanceObjetiveFunction()}">
+                    <p:ajax update="balanceProjectInterestWeight"/>
+                    <f:ajax render="@form"/>
+                </p:selectBooleanCheckbox>
+                <p:outputLabel for="BalanceProjectInterests" value="#{bundle.balance_between_teams}"/>
+            </div>
+            <div class="ui-g-2">
+                <p:spinner id="balanceProjectInterestWeight"
+                           value="#{tF_StepThreeController.balanceProjectInterestWeight}" min="0" max="1"
+                           stepFactor="0.01"
+                           disabled="#{!tF_StepThreeController.balanceProjectInterests}"
+                           rendered="#{tF_StepThreeController.mostrarPesos}">
+                    <p:ajax update="#{p:component('projectInterestWeightLabel2')}"/>
+                </p:spinner>
+            </div>
+        </div>
+    </div>
+</ui:composition>

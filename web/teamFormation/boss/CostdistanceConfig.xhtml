@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-6">
+                <div class="ui-g-1">
+                    <p:selectBooleanCheckbox id="takeCostDistance" value="#{tF_StepTwoController.takeCostDistance}">
+                        <f:ajax render="@form"/>
+                    </p:selectBooleanCheckbox>
+                </div>
+                <div class="ui-g-11">
+                    <p:outputLabel for="takeCostDistance" value="#{bundle.teamCostDistanceOption}"/>
+                </div>
+            </div>
+            <div class="ui-g-1">
+                <p:outputLabel for="costDistance" value="#{bundle.projectWeight}"/>
+            </div>
+            <div class="ui-g-3">
+                <p:spinner id="costDistance" value="#{tF_StepTwoController.costDistanceWeight}" min="0"
+                           max="#{tF_StepTwoController.higherCostDistanceWeight()}" stepFactor="0.01"
+                           disabled="#{not tF_StepTwoController.takeCostDistance}">
+                    <p:ajax event="change" process="costDistance"
+                            update="costDistance,#{p:component('costDistanceLabel')}"/>
+                </p:spinner>
+            </div>
+        </div>
+    </div>
+
+</ui:composition>

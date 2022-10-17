@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+
+
+    <h:panelGroup>
+        <p:blockUI widgetVar="charactBui" block="competencesContent"/>
+        <div class="z-depth-1 center-block">
+            <p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+                <h:outputText value="#{bundle.psychoLabel1}"/>
+                <p:panelGrid columns="2">
+                    <p:selectBooleanCheckbox id="belbin" value="#{tF_StepTwoController.preferBelbin}"/>
+                    <p:outputLabel for="belbin" value="#{bundle.psychoPreferenceLabel}"/>
+                </p:panelGrid>
+                <h:outputText value="#{bundle.psychoLabel2}"/>
+                <p:panelGrid columns="2">
+                    <p:selectBooleanCheckbox id="myaerBrigs" value="#{tF_StepTwoController.preferMyersBrigs}"/>
+                    <p:outputLabel for="myaerBrigs" value="#{bundle.psychoSubtypeEJLabel}"/>
+                </p:panelGrid>
+            </p:panelGrid>
+        </div>
+    </h:panelGroup>
+
+
+</ui:composition>

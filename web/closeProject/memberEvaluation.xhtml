@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:composition template="/template/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="Evaluación"></h:outputText> 
+        </ui:define>
+
+        <ui:define name="body">
+
+            <h:form id="WorkerCreateForm">   
+                <p:outputLabel value="#{closeProjectBean.memberSelected.member.personName}  #{closeProjectBean.memberSelected.member.surName}  " />
+
+                <p:fieldset toggleable="true">
+
+                    <p:tabView  id="tabs" dynamic="true" cache="true" >
+
+                        <p:tab id="genCompTab" title="#{bundle.genericCompTab}">
+
+                            <p:panelGrid id="genCompPanelGroup" layout="grid" columns="2" >
+                                <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank" > 
+                                    <p:outputLabel for="genCompSelection" value="#{bundle.selectGenCompetitionHeader}" />
+                                    <p:selectOneListbox id="genCompSelection"  value="#{closeProjectBean.selectedGenComp}" filter="true" filterMatchMode="contains" disabled="#{empty closeProjectBean.genCmpItems}">
+                                        <f:selectItems value="#{closeProjectBean.genCmpItems}" var="genCompSelectionItem" itemValue="#{genCompSelectionItem}" itemLabel="-#{genCompSelectionItem.competitionName}"   />
+
+                                        <p:ajax event="change" listener="#{closeProjectBean.hadleGenCompAddButton_Listener}" update="addGenCompButton,genCompLevels"  />
+                                    </p:selectOneListbox>
+
+                                    <p:outputLabel value="#{bundle.genCompetenceLevelSelector}" for="genCompLevels" />
+                                    <p:selectOneMenu effect="clip"  id="genCompLevels" value="#{closeProjectBean.selectedGenLvl}" disabled="#{empty closeProjectBean.genCmpItems}" filter="true" filterMatchMode="contains" >
+                                        <f:selectItem itemLabel="#{bundle.selectOnePlaceHolder}"  />
+                                        <f:selectItems value="#{levelsController.itemsAvailableSelectOne}"
+                                                       var="genCompLvlListItem"
+                                                       itemValue="#{genCompLvlListItem}"
+                                                       itemLabel="#{genCompLvlListItem.levels}->#{genCompLvlListItem.significance}"/>
+                                        <p:ajax event="change" listener="#{closeProjectBean.hadleGenCompAddButton_Listener}" update="genDimensions,addGenCompButton"  />
+                                    </p:selectOneMenu>
+
+                                </p:panelGrid>
+
+                                <p:dataList id="genDimensions"   value="#{closeProjectBean.getGenCompetenceDimensionList()}" var="genDim" type="ordered">
+                                    <f:facet name="header">
+                                        #{bundle.genObservableConducts}
+                                    </f:facet>
+                                    #{genDim.name}
+                                </p:dataList>
+
+                                <p:commandButton class="z-depth-1" id="addGenCompButton" icon="ui-icon-plus" type="button" value="#{bundle.addSelectedWorkerCompetenceLevel}" disabled="#{closeProjectBean.disableGenCompAddButton}" >
+                                    <p:ajax event="click" update="genCompPanelGroup,selectedGenCompLvl"  listener="#{closeProjectBean.addGenCompLvl_Listener()}"/>
+                                    <p:ajax event="click" update="addGenCompButton"  listener="#{closeProjectBean.hadleGenCompAddButton_Listener()}"/>
+                                </p:commandButton>
+                            </p:panelGrid>
+
+                            <p:dataTable  id="selectedGenCompLvl"
+                                          value="#{closeProjectBean.genCmpLvlItems}" 
+                                          editable="true" 
+                                          selection="#{closeProjectBean.genCmpLvlTableSelection}" 
+                                          style="margin-bottom:0"
+                                          var="genCompTableSelection"
+                                          rowKey="#{genCompTableSelection.competenceFk.id}"
+
+                                          >
+
+                                <f:facet name="header">
+                                    #{bundle.listSelectedWorkerGenCompetences}
+                                </f:facet>
+
+                                <p:ajax event="rowSelect"   update="deleteButton"/>
+                                <p:ajax event="rowUnselect" update="deleteButton"/>
+                                <p:ajax event="rowSelectCheckbox" update="deleteButton"/>
+                                <p:ajax event="rowUnselectCheckbox" update="deleteButton"/>
+                                <p:ajax event="toggleSelect" update="deleteButton"/>
+
+                                <p:column selectionMode="multiple" style="width:16px;text-align:center" />
+
+                                <p:column headerText="#{bundle.ListCompetenceTitle_competitionName}" filterBy="#{genCompTableSelection.competenceFk.competitionName}" sortBy="#{genCompTableSelection.competenceFk.competitionName}">
+                                    #{genCompTableSelection.competenceFk.competitionName}
+                                </p:column>
+
+                                <p:column headerText="#{bundle.ListLevelsTitle_levels}" filterBy="#{genCompTableSelection.levelFk.significance}" sortBy="#{genCompTableSelection.levelFk.levels}">
+                                    #{genCompTableSelection.levelFk.levels}.#{genCompTableSelection.levelFk.significance}
+                                </p:column>
+
+                                <f:facet name="footer">
+                                    <p:commandButton class="z-depth-1" id="deleteButton" type="button" process="selectedGenCompLvl"  icon="ui-icon-trash"  value="#{bundle.quitSelectedCompetence}" disabled="#{empty closeProjectBean.genCmpLvlTableSelection}">
+                                        <p:ajax event="click" update="WorkerCreateForm:tabs:selectedGenCompLvl,WorkerCreateForm:tabs:genCompSelection" listener="#{closeProjectBean.removeGenCompFromTable_Listener()}" />
+                                    </p:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                        </p:tab>
+
+                        <p:tab id="techCompTab" title="#{bundle.technicalCompTab}" >
+
+                            <p:panelGrid id="techCompPanelGroup" layout="grid" columns="2" >
+                                <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank"> 
+                                    <p:outputLabel for="techCompSelection" value="#{bundle.selectTechCompetitionHeader}" />
+                                    <p:selectOneListbox id="techCompSelection"  value="#{closeProjectBean.selectedTechComp}" filter="true" filterMatchMode="contains" disabled="#{empty closeProjectBean.techCmpItems}">
+                                        <f:selectItems value="#{closeProjectBean.techCmpItems}" var="selectionItem" itemValue="#{selectionItem}" itemLabel="- #{selectionItem.competitionName}"  />
+                                        <p:ajax event="change" listener="#{closeProjectBean.hadleTechCompAddButton_Listener()}"  update="addTechCompButton,techCompLevels" />
+                                    </p:selectOneListbox>
+
+                                    <p:outputLabel value="#{bundle.techCompetenceLevelSelector}" for="techCompLevels" />
+                                    <p:selectOneMenu effect="clip"  id="techCompLevels" value="#{closeProjectBean.selectedTechLvl}" disabled="#{empty closeProjectBean.techCmpItems}" filter="true" filterMatchMode="contains" >
+                                        <f:selectItem itemLabel="#{bundle.selectOnePlaceHolder}"  />
+                                        <f:selectItems value="#{levelsController.itemsAvailableSelectOne}"
+                                                       var="techCompLvlListItem"
+                                                       itemValue="#{techCompLvlListItem}"
+                                                       itemLabel="#{techCompLvlListItem.levels}->#{techCompLvlListItem.significance}"/>
+                                        <p:ajax event="change" listener="#{closeProjectBean.hadleTechCompAddButton_Listener()}" update="techDimensions,addTechCompButton"  />
+                                    </p:selectOneMenu>
+
+                                </p:panelGrid>
+
+                                <p:dataList id="techDimensions"   value="#{closeProjectBean.getTechCompetenceDimensionList()}" var="techDim" type="ordered">
+                                    <f:facet name="header">
+                                        #{bundle.techObservableConducts}
+                                    </f:facet>
+                                    #{techDim.name}
+                                </p:dataList>
+
+                                <p:commandButton class="z-depth-1" id="addTechCompButton" icon="ui-icon-plus" type="button" value="#{bundle.addSelectedWorkerCompetenceLevel}" disabled="#{closeProjectBean.disableTechCompAddButton}" >
+                                    <p:ajax event="click" update="techCompPanelGroup,selectedTechCompLvl"  listener="#{closeProjectBean.addTechCompLvl_Listener()}"/>
+                                    <p:ajax event="click" update="addTechCompButton"  listener="#{closeProjectBean.hadleTechCompAddButton_Listener()}"/>
+                                </p:commandButton>
+                            </p:panelGrid>
+
+                            <p:dataTable  id="selectedTechCompLvl"
+                                          value="#{closeProjectBean.techCmpLvlItems}" 
+                                          editable="true" 
+                                          selection="#{closeProjectBean.techCmpLvlTableSelection}" 
+                                          style="margin-bottom:0"
+                                          var="techCompTableSelection"
+                                          rowKey="#{techCompTableSelection.competenceFk.id}"
+
+                                          >
+
+                                <f:facet name="header">
+                                    #{bundle.listSelectedWorkerTechCompetences}
+                                </f:facet>
+
+                                <p:ajax event="rowSelect"   update="deleteButton"/>
+                                <p:ajax event="rowUnselect" update="deleteButton"/>
+                                <p:ajax event="rowSelectCheckbox" update="deleteButton"/>
+                                <p:ajax event="rowUnselectCheckbox" update="deleteButton"/>
+                                <p:ajax event="toggleSelect" update="deleteButton"/>
+
+                                <p:column selectionMode="multiple" style="width:16px;text-align:center" />
+
+                                <p:column headerText="#{bundle.ListCompetenceTitle_competitionName}" filterBy="#{techCompTableSelection.competenceFk.competitionName}" sortBy="#{techCompTableSelection.competenceFk.competitionName}">
+                                    #{techCompTableSelection.competenceFk.competitionName}
+                                </p:column>
+
+                                <p:column headerText="#{bundle.ListLevelsTitle_levels}" filterBy="#{techCompTableSelection.levelFk.significance}" sortBy="#{techCompTableSelection.levelFk.levels}#{techCompTableSelection.levelFk.significance}">
+                                    #{techCompTableSelection.levelFk.levels}.#{techCompTableSelection.levelFk.significance}
+                                </p:column>
+
+                                <f:facet name="footer">
+                                    <p:commandButton class="z-depth-1" id="deleteButton" type="button" process="selectedTechCompLvl"  icon="ui-icon-trash"  value="#{bundle.quitSelectedCompetence}" disabled="#{empty closeProjectBean.techCmpLvlTableSelection}">
+                                        <p:ajax event="click" update="selectedTechCompLvl,WorkerCreateForm:tabs:techCompSelection"  listener="#{closeProjectBean.removeTechCompFromTable_Listener()}"/>
+                                    </p:commandButton>
+                                </f:facet>
+                            </p:dataTable>
+
+                        </p:tab>
+
+                        <p:tab id="rolesEvaluation" title="Evaluar roles">
+
+
+                            <p:dataTable  id="memberSelectedRoles" value="#{closeProjectBean.memberSelected.roleEvaluationsMember}" var="rol"
+                                          editMode="cell" editInitEvent="dblclick" editable="true"
+                                          paginator="true"
+                                          rowKey="#{rol.roleFk}"
+                                          rows="10"
+                                          rowsPerPageTemplate="10,20,30,40,50"
+                                          >
+
+                                <p:ajax event="rowEdit" listener="#{closeProjectBean.onRowEdit}" update="memberSelectedRoles, :growl" />
+                                <p:ajax event="rowEditCancel" listener="#{closeProjectBean.onRowCancel}" update="memberSelectedRoles, :growl" />
+                                <p:ajax event="cellEdit" listener="#{closeProjectBean.onCellEdit}" update=":WorkerCreateForm:tabs:memberSelectedRoles"/>                                                      
+                                
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Rol"/>
+                                    </f:facet>
+                                    <h:outputText value="#{rol.roleFk.roleName}"/>
+                                </p:column>
+                                
+                                <p:column headerText="Evaluación en el rol">
+                                   <p:cellEditor>
+                                 
+                                   <f:facet name="output">
+                                       <h:outputText value="#{rol.rolEvalFk.significance}"/>
+                                   </f:facet>
+                                 
+                                   <f:facet name="input">
+                                      <h:selectOneMenu value="#{rol.rolEvalFk}" converter="EntityConverter" required="true" >                                        
+                                      <f:selectItems value="#{closeProjectBean.roleEvalList}" var="roleList" itemValue="#{roleList}" itemLabel="#{roleList.significance}"></f:selectItems>
+                                      </h:selectOneMenu>
+                                   </f:facet>
+                                 
+                                   </p:cellEditor>
+                                </p:column> 
+                                
+                            </p:dataTable>
+                            
+                        </p:tab>
+
+                        <p:tab id="workerComflict" title="Nivel de compatibilidad">
+                            <p:dataTable  id="datalist" value="#{closeProjectBean.membersConflict}" var="item"
+                                         editMode="cell" editInitEvent="dblclick" editable="true"
+                                          paginator="true"
+                                          rowKey="#{item.member.id}"
+                                          rows="10"
+                                          rowsPerPageTemplate="10,20,30,40,50"
+                                          >
+
+                                <p:ajax event="rowEdit" listener="#{closeProjectBean.onRowEdit}" update="datalist, :growl" />
+                                <p:ajax event="rowEditCancel" listener="#{closeProjectBean.onRowCancel}" update="datalist, :growl" />
+                                 <p:ajax event="cellEdit" listener="#{closeProjectBean.onCellEdit}" update=":WorkerCreateForm:tabs:datalist"/>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.ListWorkerTitle_personName}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.member.personName}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.ListWorkerTitle_surName}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.member.surName}"/>
+                                </p:column>
+
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{bundle.ListWorkerTitle_idCard}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{item.member.idCard}"/>
+                                </p:column>
+
+                                <p:column headerText="Nivel de conflicto">
+                                   <p:cellEditor>
+                                 
+                                <f:facet name="output">
+                                    <h:outputText value="#{item.compatibilityLevel.indexFk.description}"/>
+                                 </f:facet>
+                                 
+                                 <f:facet name="input">
+                                     <h:selectOneMenu value="#{item.compatibilityLevel.indexFk}" converter="EntityConverter" required="true" >                                        
+                                     <f:selectItems value="#{closeProjectBean.conflictsIndexList}" var="conflictList" itemValue="#{conflictList}" itemLabel="#{conflictList.description}"></f:selectItems>
+                                    </h:selectOneMenu>
+                                 </f:facet>
+                                 
+                                   </p:cellEditor>
+                                </p:column> 
+
+                            </p:dataTable>
+
+                        </p:tab>
+
+                    </p:tabView>
+
+                </p:fieldset>
+
+                <br/>
+                <p:commandButton class="z-depth-1" action="#{closeProjectBean.create()}" value="#{bundle.Save}" update="@form,:growl"  />
+                <p:commandButton class="z-depth-1" id="backButton" action="#{closeProjectBean.membersToEvaluateRoute()}"  immediate="true" value="Regresar"    /> 
+
+            </h:form>  
+        </ui:define>
+
+    </ui:composition>        
+</ui:composition>
+

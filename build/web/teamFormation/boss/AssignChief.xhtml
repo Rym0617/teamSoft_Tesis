@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12">
+            <h:outputText value="#{bundle.teamOptionsFieldset}"
+                          style="display:block; align-content: center; text-align: left" class="blue-grey-text"/>
+            <div class="ui-g-9">
+
+                <p:tabView activeIndex="#{tF_StepTwoController.activeIndex}">
+                    <p:ajax event="tabChange" listener="#{tF_StepTwoController.onChange}"/>
+                    <p:tab id="tabCompetences"
+                           titleStyle="#{tF_StepTwoController.takeCompetences ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="competenceWeightLabel"
+                                          style="#{tF_StepTwoController.takeCompetences ? 'color: white': null}">
+                                <p:graphicImage library="img" name="competences.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText value="#{bundle.teamCompetencesTab}" style="display:block"
+                                              class="blue-grey-text tabText"/>
+
+                                <c:if id="test" test="#{tF_StepTwoController.takeCompetences}">
+                                    <h:outputText value="#{bundle.projectWeight} #{tF_StepTwoController.competenceWeight}"/>
+                                </c:if>
+                                <c:if id="test" test="#{not tF_StepTwoController.takeCompetences}">
+                                    <h:outputText value="#{bundle.projectWeight} --"/>
+                                </c:if>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="CompetencesConfig.xhtml"/>
+                    </p:tab>
+
+                    <p:tab id="tabWorkLoad"
+                           titleStyle="#{tF_StepTwoController.takeWorkLoad ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="workLoadWeighttLabel"
+                                          style="#{tF_StepTwoController.takeWorkLoad ? 'color: white': null}">
+                                <p:graphicImage library="img" name="work.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText value="#{bundle.teamWorkLoadTab}" style="display:block"
+                                              class="blue-grey-text tabText"/>
+
+                                <c:if id="test" test="#{tF_StepTwoController.takeWorkLoad}">
+                                    <h:outputText value="#{bundle.projectWeight} #{tF_StepTwoController.workLoadWeight}"/>
+                                </c:if>
+                                <c:if id="test" test="#{not tF_StepTwoController.takeWorkLoad}">
+                                    <h:outputText value="#{bundle.projectWeight} --"/>
+                                </c:if>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="WorkloadConfig.xhtml"/>
+                    </p:tab>
+
+                    <p:tab id="tabInterest"
+                           titleStyle="#{tF_StepTwoController.takeInterests ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="interestLabel"
+                                          style="#{tF_StepTwoController.takeInterests ? 'color: white': null}">
+                                <p:graphicImage library="img" name="interest.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText value="#{bundle.teamInterestTab}" style="display:block"
+                                              class="blue-grey-text tabText"/>
+                                <c:if id="test" test="#{tF_StepTwoController.takeInterests}">
+                                    <h:outputText value="#{bundle.projectWeight} #{tF_StepTwoController.interestWeight}"/>
+                                </c:if>
+                                <c:if id="test" test="#{not tF_StepTwoController.takeInterests}">
+                                    <h:outputText value="#{bundle.projectWeight} --"/>
+                                </c:if>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="InterestConfig.xhtml"/>
+                    </p:tab>
+
+                    <p:tab id="tabCharacteristics">
+                        <f:facet name="title">
+                            <p:graphicImage library="img" name="psycho.jpg" class="tabImg z-depth-1"/>
+                            <h:outputText value="#{bundle.teamCharacteristicsTab}" style="display:block;"
+                                          class="blue-grey-text tabText"/>
+                        </f:facet>
+                        <ui:include src="CharacteristicsConfig.xhtml"/>
+                    </p:tab>
+
+                    <p:tab id="tabCostdistance"
+                           titleStyle="#{tF_StepTwoController.takeCostDistance ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="costDistanceLabel"
+                                          style="#{tF_StepTwoController.takeCostDistance ? 'color: white': null}">
+                                <p:graphicImage library="img" name="costDistance.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText value="#{bundle.teamCostDistanceTab}" style="display:block"
+                                              class="blue-grey-text tabText"/>
+
+                                <c:if id="test" test="#{tF_StepTwoController.takeCostDistance}">
+                                    <h:outputText value="#{bundle.projectWeight} #{tF_StepTwoController.costDistanceWeight}"/>
+                                </c:if>
+                                <c:if id="test" test="#{not tF_StepTwoController.takeCostDistance}">
+                                    <h:outputText value="#{bundle.projectWeight} --"/>
+                                </c:if>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="CostdistanceConfig.xhtml"/>
+                    </p:tab>
+                    <p:tab id="tabProjectInterest"
+                           titleStyle="#{tF_StepTwoController.takeProjectInterests ? 'background-color: #0277bd':'background-color: white'}">
+                        <f:facet name="title">
+                            <h:panelGroup id="projectInterestLabel"
+                                          style="#{tF_StepTwoController.takeProjectInterests ? 'color: white': null}">
+                                <p:graphicImage library="img" name="interest.jpg" class="tabImg z-depth-1"/>
+                                <h:outputText value="#{bundle.teamProjectInterestTab}" style="display:block"
+                                              class="blue-grey-text tabText"/>
+                                <c:if id="test" test="#{tF_StepTwoController.takeProjectInterests}">
+                                    <h:outputText value="#{bundle.projectWeight} #{tF_StepTwoController.projectInterestWeight}"/>
+                                </c:if>
+                                <c:if id="test" test="#{not tF_StepTwoController.takeProjectInterests}">
+                                    <h:outputText value="#{bundle.projectWeight} --"/>
+                                </c:if>
+                            </h:panelGroup>
+                        </f:facet>
+                        <ui:include src="ProjectInterestConfig.xhtml"/>
+                    </p:tab>
+                </p:tabView>
+            </div>
+            <div class="ui-g-3">
+                <p:scrollPanel id="bossProposalScroll" style="width: 100%; height:100%; margin: 2%" mode="native">
+                    <div class="ui-g-12">
+                        <h:outputText value="#{bundle.boss_proposal}"/>
+
+                        <p:tree id="bossTree" value="#{tF_StepTwoController.bossProposal}"
+                                selection="#{tF_StepTwoController.selectedNode}" var="prop" selectionMode="single"
+                                animate="true" propagateSelectionUp="false">
+                            <p:treeNode id="projectNode" type="P" expandedIcon="fa fa-group"
+                                        collapsedIcon="fa fa-user-plus">
+                                <h:outputText value="#{prop.projectName}"/>
+                            </p:treeNode>
+                            <p:treeNode id="bossNode" type="B" expandedIcon="fa fa-user" collapsedIcon="fa fa-user">
+                                <h:outputText value="#{prop.person.personName} #{prop.person.surName}: "/>
+                                <h:outputText value="#{prop.evaluation}">
+                                    <f:convertNumber type="number" pattern="#,##0.####"/>
+                                </h:outputText>
+                            </p:treeNode>
+                        </p:tree>
+
+                        <div class="ui-g-6">
+                            <p:commandButton class="z-depth-1" type="Button" value="#{bundle.btn_generate}">
+                                <p:ajax process="@form" event="click" update="bossTree,:growl,assignBoss"
+                                        listener="#{tF_StepTwoController.getBoss()}"/>
+                            </p:commandButton>
+                        </div>
+                        <div class="ui-g-6">
+                            <p:commandButton id="assignBoss" class="z-depth-1" type="Button"
+                                             disabled="#{empty tF_StepTwoController.bossProposal}"
+                                             value="#{bundle.assignChiefBtnAssign}">
+                                <p:ajax process="@form" event="click" update="fixedChiefs,bossTree,:growl"
+                                        listener="#{tF_StepTwoController.fixBoss()}"/>
+                            </p:commandButton>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="ui-g-12">
+                        <p:dataTable id="fixedChiefs"
+                                     value="#{tF_StepTwoController.parametersBoss.fixedWorkers}"
+                                     editable="true"
+                                     selection="#{tF_StepTwoController.fixedChiefsRemoveList}"
+                                     style="margin-bottom:0"
+                                     var="fixedChiefs"
+                                     rowKey="#{fixedChiefs.boss.id}#{fixedChiefs.project.id}#{fixedChiefs.role.id}"
+                        >
+
+                            <f:facet name="header">
+                                #{bundle.assigned_chiefs}
+                            </f:facet>
+
+                            <p:ajax event="rowSelect" update="deleteButton3"/>
+                            <p:ajax event="rowUnselect" update="deleteButton3"/>
+                            <p:ajax event="rowSelectCheckbox" update="deleteButton3"/>
+                            <p:ajax event="rowUnselectCheckbox" update="deleteButton3"/>
+                            <p:ajax event="toggleSelect" update="deleteButton3"/>
+
+                            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+                            <p:column headerText="#{bundle.projectMenu}">
+                                #{fixedChiefs.project.projectName}
+                            </p:column>
+
+                            <p:column headerText="#{bundle.assigned_chief}">
+                                #{fixedChiefs.boss.personName}
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <p:commandButton class="z-depth-1" id="deleteButton3" type="button"
+                                                 process="fixedChiefs" icon="ui-icon-trash"
+                                                 value="#{bundle.quitSelectedCompetence}"
+                                                 disabled="#{empty tF_StepTwoController.fixedChiefsRemoveList}">
+                                    <p:ajax event="click" update="#{p:component('bossTree')},fixedChiefs"
+                                            listener="#{tF_StepTwoController.removeBossFromTable_Listener()}"/>
+                                </p:commandButton>
+                            </f:facet>
+                        </p:dataTable>
+                    </div>
+                </p:scrollPanel>
+            </div>
+        </div>
+    </div>
+</ui:composition>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog id="ClientEntityEditDlg" widgetVar="ClientEntityEditDialog" modal="true" resizable="false"
+              appendTo="@(body)" header="#{bundle.EditClientEntityTitle}">
+        <h:form id="ClientEntityEditForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{clientEntityController.selected != null}">
+                    <p:outputLabel value="#{bundle.EditClientEntityLabel_entityName}" for="entityName"/>
+                    <p:inputText id="entityName" value="#{clientEntityController.selected.entityName}"
+                                 title="#{bundle.EditClientEntityTitle_entityName}" required="true"
+                                 requiredMessage="#{bundle.EditClientEntityRequiredMessage_entityName}"/>
+                    <p:outputLabel value="#{bundle.EditClientEntityLabel_address}" for="address"/>
+                    <p:inputText id="address" value="#{clientEntityController.selected.address}"
+                                 title="#{bundle.EditClientEntityTitle_address}" required="true"
+                                 requiredMessage="#{bundle.EditClientEntityRequiredMessage_address}"/>
+                    <p:outputLabel value="#{bundle.EditClientEntityLabel_phone}" for="phone"/>
+                    <p:inputText id="phone" value="#{clientEntityController.selected.phone}"
+                                 title="#{bundle.EditClientEntityTitle_phone}" required="true"
+                                 requiredMessage="#{bundle.EditClientEntityRequiredMessage_phone}"/>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" actionListener="#{clientEntityController.update}"
+                                 value="#{bundle.Save}" update="display,:ClientEntityListForm:datalist,:growl"
+                                 oncomplete="handleSubmit(args, 'ClientEntityEditDialog');"/>
+                <p:commandButton class="z-depth-1" value="#{bundle.Cancel}" onclick="ClientEntityEditDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

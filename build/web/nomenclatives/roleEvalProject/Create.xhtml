@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog id="RoleEvalProjectCreateDlg" closable="false" widgetVar="RoleEvalProjectCreateDialog" modal="true"
+              resizable="false" appendTo="@(body)" header="#{bundle.CreateRoleEvalProjectTitle}">
+        <h:form id="RoleEvalProjectCreateForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{roleEvalProjectController.selected != null}">
+                    <p:outputLabel value="#{bundle.CreateRoleEvalProjectLabel_cycleFk}" for="cycleFk"/>
+                    <p:selectOneMenu effect="clip" id="cycleFk" value="#{roleEvalProjectController.selected.cycleFk}"
+                                     required="true"
+                                     requiredMessage="#{bundle.EditRoleEvalProjectRequiredMessage_cycleFk}">
+                        <f:selectItems value="#{cycleController.itemsAvailableSelectOne}"
+                                       var="cycleFkItem"
+                                       itemValue="#{cycleFkItem}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="#{bundle.CreateRoleEvalProjectLabel_roleEvalFk}" for="roleEvalFk"/>
+                    <p:selectOneMenu effect="clip" id="roleEvalFk"
+                                     value="#{roleEvalProjectController.selected.roleEvalFk}" required="true"
+                                     requiredMessage="#{bundle.EditRoleEvalProjectRequiredMessage_roleEvalFk}">
+                        <f:selectItems value="#{roleEvalController.itemsAvailableSelectOne}"
+                                       var="roleEvalFkItem"
+                                       itemValue="#{roleEvalFkItem}"
+                                       itemLabel="#{roleEvalFkItem.levels}->#{roleEvalFkItem.significance}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" actionListener="#{roleEvalProjectController.create}"
+                                 value="#{bundle.Save}" update="display,:RoleEvalProjectListForm:datalist,:growl"
+                                 oncomplete="handleSubmit(args,'RoleEvalProjectCreateDialog');"/>
+                <p:commandButton class="z-depth-1" value="#{bundle.Cancel}"
+                                 onclick="RoleEvalProjectCreateDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

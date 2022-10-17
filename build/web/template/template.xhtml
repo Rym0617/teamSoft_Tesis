@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="#{localeBean.language}" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<!--sin esta etiqueta la internacionalizacion no funciona-->
+<f:view locale="#{localeBean.language}">
+    <h:head>
+        <link rel="icon"
+              href="#{request.contextPath}/resources/images/favicon-admin.png"
+              type="image/x-icon"/>
+        <link rel="shortcut icon"
+              href="#{request.contextPath}/resources/images/favicon-admin.png"/>
+
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+        </f:facet>
+
+        <title>TeamSoft+</title>
+
+
+        <!--Scripts JS-->
+        <h:outputScript name="js/nanoscroller.js" library="ultima-layout"/>
+        <h:outputScript name="js/layout.js" library="ultima-layout"/>
+        <h:outputScript name="js/ripple.js" library="ultima-layout"/>
+        <h:outputScript name="js/swipe.js" library="ultima-layout"/>
+        <h:outputScript name="jsfcrud.js" library="js"/>
+        <!--Scripts CSS-->
+        <h:outputStylesheet name="css/nanoscroller.css" library="ultima-layout"/>
+        <h:outputStylesheet name="css/animate.css" library="ultima-layout"/>
+        <h:outputStylesheet name="css/ripple.css" library="ultima-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="ultima-layout"/>
+        <h:outputStylesheet name="content.css" library="css"/>
+        <h:outputStylesheet name="primefaces-custom.css" library="css"/>
+        <h:outputStylesheet name="jsfcrud.css" library="css"/>
+        <h:outputStylesheet name="cssLayout.css" library="css"/>
+
+        <ui:insert name="head"/>
+    </h:head>
+
+    <h:body styleClass="main-body #{guestPreferences.compact ? 'layout-compact' : null}">
+
+        <p:growl id="growl" life="5000"/>
+
+        <div class="layout-wrapper #{guestPreferences.menuLayout} #{guestPreferences.orientationRTL ? 'layout-rtl' : null}">
+            <ui:include src="/template/components/topbar.xhtml"/>
+            <ui:include src="/template/components/menu.xhtml"/>
+
+            <div class="layout-main">
+                <!--<ui:include src="/template/components/breadcrumb.xhtml"></ui:include>-->
+                <!--<br/>-->
+                <!--<span class="profile-name">#{p:userPrincipal()}</span>-->
+                <ui:insert name="body"/>
+
+                <br/>
+                <!--<ui:include src="/template/components/footer.xhtml" />-->
+            </div>
+        </div>
+
+        <p:ajaxStatus style="height:32px;position:fixed;right:20px;top:130px;width: auto;">
+            <f:facet name="start">
+                <div class="card shadow-box ui-shadow-3" style="background-color: #03a9f4">
+                    <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true" style="color:#fff;"></i>
+                    <span style="white-space: nowrap; position:relative; top:-5px; color:#fff;"><strong>Procesando...</strong></span>
+                </div>
+            </f:facet>
+
+            <f:facet name="complete">
+            </f:facet>
+        </p:ajaxStatus>
+
+        <p:growl autoUpdate="true" rendered="true" globalOnly="true" id="growlMessages"/>
+
+
+    </h:body>
+</f:view>
+</html>

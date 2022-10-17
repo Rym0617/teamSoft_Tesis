@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog closable="false" id="WorkerTestViewDlg" widgetVar="WorkerTestViewDialog" modal="true" resizable="false"
+              appendTo="@(body)" header="#{bundle.ViewWorkerTestTitle}">
+        <h:form id="WorkerTestViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{workerTestController.selected != null}">
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_id}"/>
+                    <h:outputText value="#{workerTestController.selected.id}" title="#{bundle.ViewWorkerTestTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_ES}"/>
+                    <h:outputText value="#{workerTestController.selected.ES}" title="#{bundle.ViewWorkerTestTitle_ES}"/>
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_ID}"/>
+                    <h:outputText value="#{workerTestController.selected.ID}" title="#{bundle.ViewWorkerTestTitle_ID}"/>
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_CO}"/>
+                    <h:outputText value="#{workerTestController.selected.CO}" title="#{bundle.ViewWorkerTestTitle_CO}"/>
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_IS}"/>
+                    <h:outputText value="#{workerTestController.selected.IS}" title="#{bundle.ViewWorkerTestTitle_IS}"/>
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_CE}"/>
+                    <h:outputText value="#{workerTestController.selected.CE}" title="#{bundle.ViewWorkerTestTitle_CE}"/>
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_IR}"/>
+                    <h:outputText value="#{workerTestController.selected.IR}" title="#{bundle.ViewWorkerTestTitle_IR}"/>
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_ME}"/>
+                    <h:outputText value="#{workerTestController.selected.ME}" title="#{bundle.ViewWorkerTestTitle_ME}"/>
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_CH}"/>
+                    <h:outputText value="#{workerTestController.selected.CH}" title="#{bundle.ViewWorkerTestTitle_CH}"/>
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_IF}"/>
+                    <h:outputText value="#{workerTestController.selected.IF}" title="#{bundle.ViewWorkerTestTitle_IF}"/>
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_tipoMB}"/>
+                    <h:outputText value="#{workerTestController.selected.tipoMB}"
+                                  title="#{bundle.ViewWorkerTestTitle_tipoMB}"/>
+                    <h:outputText value="#{bundle.ViewWorkerTestLabel_workerFk}"/>
+                    <h:outputText value="#{workerTestController.selected.workerFk}"
+                                  title="#{bundle.ViewWorkerTestTitle_workerFk}"/>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" value="#{bundle.Close}" onclick="WorkerTestViewDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

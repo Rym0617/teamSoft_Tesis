@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/template/template.xhtml">
+
+    <ui:define name="body">
+        <p:fieldset legend="#{bundle.projectFieldset}">
+
+            <p:growl id="wzrdGrowl">
+                <p:autoUpdate/>
+            </p:growl>
+
+
+            <h:form id="projectForm">
+
+                <p:wizard id="wzrd" nextLabel="#{bundle.wizarProjectNextLabel}"
+                          backLabel="#{bundle.wizarProjectBackLabel}"
+                          flowListener="#{myProjectController.singleCreateFlow_Listener}">
+
+                    <p:tab id="generalData" title="#{bundle.wizarGeneralData}">
+                        <p:panel>
+                            <ui:include src="GeneralData.xhtml"/>
+                        </p:panel>
+                    </p:tab>
+
+
+                    <p:tab id="StructureData" title="#{bundle.wizarProjectStructure}">
+                        <p:panel id="structPanel">
+                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank"
+                                         columnClasses="ui-g-2">
+                                <h:outputLabel for="name" value="#{bundle.CreateProjectStructureLabel_name}"/>
+                                <p:selectOneMenu editable="true" placeholder="#{bundle.CreateProjectStructureLabel_ph}"
+                                                 effect="clip" id="name" value="#{myProjectController.structureCreate}"
+                                                 filter="true" filterMatchMode="contains" required="true"
+                                                 requiredMessage="#{bundle.CreateProjectStructureRequiredMessage_name}">
+                                    <f:selectItems value="#{projectStructureController.itemsAvailableSelectOne}"
+                                                   var="structure"
+                                                   itemValue="#{structure.name}"
+                                                   itemLabel="#{structure.name}"/>
+                                    <p:ajax event="itemSelect" onsuccess="PF('bui').show()"/>
+                                    <p:ajax event="change" onsuccess="PF('bui').hide()"/>
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+
+                            <p:blockUI block="teamTab" widgetVar="bui"/>
+
+                        </p:panel>
+                        <p:panelGrid id="teamTab" layout="grid" columns="2">
+                            <p:panelGrid id="list" columns="2" styleClass="ui-panelgrid-blank">
+                                <p:outputLabel for="rolSelection" value="#{bundle.wizarProjectRoles}"/>
+                                <p:selectOneListbox id="rolSelection" value="#{projectRolesController.selected.roleFk}"
+                                                    filter="true" filterMatchMode="contains"
+                                                    disabled="#{empty myProjectController.rolList}">
+                                    <f:selectItems value="#{myProjectController.rolList}" var="selectionItem"
+                                                   itemValue="#{selectionItem}"
+                                                   itemLabel="- #{selectionItem.roleName}"/>
+
+                                    <p:ajax update="addRol"
+                                            listener="#{myProjectController.hadleAddRolButton_Listener()}"/>
+                                    <p:hotkey bind="enter" handler="PF('rolSelection').blur();"/>
+                                </p:selectOneListbox>
+
+                                <p:outputLabel value="#{bundle.wizarProjectRoleLoad}" for="rolLoad"/>
+                                <p:selectOneMenu effect="clip" id="rolLoad"
+                                                 value="#{projectRolesController.selected.roleLoadFk}"
+                                                 disabled="#{empty myProjectController.rolList}" filter="true"
+                                                 filterMatchMode="contains">
+                                    <f:selectItem itemLabel="#{bundle.selectOnePlaceHolder}"/>
+                                    <f:selectItems value="#{roleLoadController.itemsAvailableSelectOne}"
+                                                   var="roleLoad"
+                                                   itemValue="#{roleLoad}"
+                                                   itemLabel="#{roleLoad.value}->#{roleLoad.significance}"/>
+                                    <p:ajax update="addRol"
+                                            listener="#{myProjectController.hadleAddRolButton_Listener()}"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="#{bundle.wizarProjectWorkersAmount}" for="workersAmount"/>
+                                <p:inputNumber id="workersAmount"
+                                               value="#{projectRolesController.selected.amountWorkersRole}"
+                                               emptyValue="zero" decimalPlaces="0"
+                                               validatorMessage="#{bundle.wizarProjectInNumberValidator}"
+                                               disabled="#{empty myProjectController.rolList}">
+                                    <p:ajax event="keyup" process="workersAmount" update="addRol"
+                                            listener="#{myProjectController.hadleAddRolButton_Listener()}"/>
+                                </p:inputNumber>
+
+                                <p:commandButton class="z-depth-1" id="addRol" icon="ui-icon-plus" type="button"
+                                                 value="#{bundle.wizarProjectAddRoleBtn}"
+                                                 disabled="#{myProjectController.disableAddRolButton}">
+                                    <p:ajax event="click" update="projectForm:teamTab"
+                                            listener="#{myProjectController.addRol_Listener()}"/>
+                                    <p:ajax event="click" update="addRol"
+                                            listener="#{myProjectController.hadleAddRolButton_Listener()}"/>
+                                </p:commandButton>
+
+                            </p:panelGrid>
+
+
+                            <p:dataTable id="teamStructure"
+                                         value="#{myProjectController.persistentRoles}"
+                                         editable="true"
+                                         selection="#{myProjectController.rolesDeleteList}"
+                                         style="margin-bottom:0"
+                                         var="projectRol"
+                                         rowKey="#{projectRol.roleFk.id}"
+                                         styleClass="z-depth-1"
+                            >
+
+                                <f:facet name="header">
+                                    #{bundle.wizarProjectRolesTH}
+                                </f:facet>
+
+                                <p:ajax event="rowSelect" update="deleteButton,deleteButtonLabel"/>
+                                <p:ajax event="rowUnselect" update="deleteButton,deleteButtonLabel"/>
+                                <p:ajax event="rowSelectCheckbox" update="deleteButton,deleteButtonLabel"/>
+                                <p:ajax event="rowUnselectCheckbox" update="deleteButton,deleteButtonLabel"/>
+                                <p:ajax event="toggleSelect" update="deleteButton,deleteButtonLabel"/>
+
+                                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+                                <p:column headerText="#{bundle.wizarProjectRoles}">
+                                    #{projectRol.roleFk.roleName}
+                                </p:column>
+
+                                <p:column headerText="#{bundle.wizarProjectWorkersAmount}">
+                                    #{projectRol.amountWorkersRole}
+                                </p:column>
+
+                                <p:column headerText="#{bundle.wizarProjectRoleLoad}">
+                                    #{projectRol.roleLoadFk.value}->#{projectRol.roleLoadFk.significance}
+                                </p:column>
+
+
+                                <f:facet name="footer">
+                                    <p:commandButton class="z-depth-1" id="deleteButton" type="button"
+                                                     process="teamStructure" icon="ui-icon-trash"
+                                                     value="#{bundle.quitSelectedCompetence}"
+                                                     disabled="#{empty myProjectController.rolesDeleteList}">
+                                        <p:ajax event="click" update="projectForm:teamTab"
+                                                listener="#{myProjectController.removeRoleFromTable_Listener()}"/>
+                                    </p:commandButton>
+                                    <p:outputLabel id="deleteButtonLabel" for="deleteButton"
+                                                   value="#{bundle.totalSelectedTableFacetLabel} #{myProjectController.rolesDeleteList.size()}"/>
+                                </f:facet>
+                            </p:dataTable>
+
+                        </p:panelGrid>
+                    </p:tab>
+
+                    <p:tab id="techCompData" title="#{bundle.wizarProjectTechCompetences}">
+                        <p:panel style="margin-top: 5px;margin-bottom: 5px">
+                            <p:outputLabel value="#{bundle.wizarProjectRoles}" for="rol"/>
+                            <p:selectOneMenu effect="clip" id="rol"
+                                             value="#{projectTechCompetenceController.selected.roleFk}" filter="true"
+                                             filterMatchMode="contains">
+                                <f:selectItem itemLabel="#{bundle.selectOnePlaceHolder}"/>
+                                <f:selectItems value="#{myProjectController.rolList2}"
+                                               var="rolItem"
+                                               itemValue="#{rolItem}"
+                                               itemLabel="#{rolItem.roleName}"/>
+                                <p:ajax update="projectForm:techCompPanelGroup"
+                                        listener="#{myProjectController.handleRolSelector_Listener}"/>
+                            </p:selectOneMenu>
+                        </p:panel>
+                        <p:panelGrid id="techCompPanelGroup" layout="grid" columns="2">
+                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank">
+                                <p:outputLabel for="techCompSelection" value="#{bundle.selectTechCompetitionHeader}"/>
+                                <p:selectOneListbox id="techCompSelection"
+                                                    value="#{projectTechCompetenceController.selected.competenceFk}"
+                                                    filter="true" filterMatchMode="contains"
+                                                    disabled="#{empty myProjectController.techCmpItems}">
+                                    <f:selectItems value="#{myProjectController.techCmpItems}" var="selectionItem"
+                                                   itemValue="#{selectionItem}"
+                                                   itemLabel="- #{selectionItem.competitionName}"/>
+                                    <p:ajax event="change" update="addTechCompButton,"/>
+                                </p:selectOneListbox>
+
+                                <p:outputLabel value="#{bundle.roleCompetenceMinLvl}" for="minLvl"/>
+                                <p:selectOneMenu effect="clip" id="minLvl"
+                                                 value="#{projectTechCompetenceController.selected.levelFk}"
+                                                 disabled="#{empty myProjectController.techCmpItems}" filter="true"
+                                                 filterMatchMode="contains">
+                                    <f:selectItem itemLabel="#{bundle.selectOnePlaceHolder}"/>
+                                    <f:selectItems value="#{levelsController.itemsAvailableSelectOne}"
+                                                   var="techCompLvlListItem"
+                                                   itemValue="#{techCompLvlListItem}"
+                                                   itemLabel="#{techCompLvlListItem.levels}->#{techCompLvlListItem.significance}"/>
+                                    <p:ajax update="addTechCompButton"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="#{bundle.roleImportanceLvl}" for="importanceLvl"/>
+                                <p:selectOneMenu effect="clip" id="importanceLvl"
+                                                 value="#{projectTechCompetenceController.selected.competenceImportanceFk}"
+                                                 disabled="#{empty myProjectController.techCmpItems}" filter="true"
+                                                 filterMatchMode="contains">
+                                    <f:selectItem itemLabel="#{bundle.selectOnePlaceHolder}"/>
+                                    <f:selectItems value="#{competenceImportanceController.itemsAvailableSelectOne}"
+                                                   var="competenceImportance"
+                                                   itemValue="#{competenceImportance}"
+                                                   itemLabel="#{competenceImportance.levels}->#{competenceImportance.significance}"/>
+                                    <p:ajax update="addTechCompButton"/>
+                                </p:selectOneMenu>
+
+                                <p:commandButton class="z-depth-1" id="addTechCompButton" icon="ui-icon-plus"
+                                                 type="button" value="#{bundle.addSelectedWorkerCompetenceLevel}"
+                                                 disabled="#{myProjectController.handleAddCompButton_Listener()}">
+                                    <p:ajax event="click" update="projectForm:techCompPanelGroup"
+                                            listener="#{myProjectController.addTechComp_Listener()}"/>
+                                </p:commandButton>
+
+                            </p:panelGrid>
+
+
+                            <p:dataTable id="selectedGenComp"
+                                         value="#{myProjectController.selectedTechComp}"
+                                         editable="true"
+                                         selection="#{myProjectController.deleteListTechComp}"
+                                         style="margin-bottom:0"
+                                         var="techCompTableSelection"
+                                         rowKey="#{techCompTableSelection.competenceFk.id}#{techCompTableSelection.roleFk.id}"
+                                         styleClass="z-depth-1"
+                                         paginator="true" rows="10"
+                            >
+
+                                <f:facet name="header">
+                                    #{bundle.technicalCompTab}
+                                </f:facet>
+
+                                <p:ajax event="rowSelect" update="deleteButton2,deleteButtonLabel2"/>
+                                <p:ajax event="rowUnselect" update="deleteButton2,deleteButtonLabel2"/>
+                                <p:ajax event="rowSelectCheckbox" update="deleteButton2,deleteButtonLabel2"/>
+                                <p:ajax event="rowUnselectCheckbox" update="deleteButton2,deleteButtonLabel2"/>
+                                <p:ajax event="toggleSelect" update="deleteButton2,deleteButtonLabel2"/>
+
+                                <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+                                <p:column headerText="#{bundle.wizarProjectRoles}"
+                                          sortBy="#{techCompTableSelection.roleFk.roleName}">
+                                    #{techCompTableSelection.roleFk.roleName}
+                                </p:column>
+
+                                <p:column headerText="#{bundle.ListCompetenceTitle_competitionName}"
+                                          sortBy="#{techCompTableSelection.competenceFk.competitionName}">
+                                    #{techCompTableSelection.competenceFk.competitionName}
+                                </p:column>
+
+                                <p:column headerText="#{bundle.roleCompetenceMinLvl}"
+                                          sortBy="#{techCompTableSelection.levelFk.levels}">
+                                    #{techCompTableSelection.levelFk.levels}.#{techCompTableSelection.levelFk.significance}
+                                </p:column>
+
+                                <p:column headerText="#{bundle.roleImportanceLvl}"
+                                          sortBy="#{techCompTableSelection.competenceImportanceFk.levels}">
+                                    #{techCompTableSelection.competenceImportanceFk.levels}.#{techCompTableSelection.competenceImportanceFk.significance}
+                                </p:column>
+
+                                <f:facet name="footer">
+                                    <p:commandButton class="z-depth-1" id="deleteButton2" type="button"
+                                                     process="selectedGenComp" icon="ui-icon-trash"
+                                                     value="#{bundle.quitSelectedCompetence}"
+                                                     disabled="#{empty myProjectController.deleteListTechComp}">
+                                        <p:ajax event="click" update="projectForm:techCompPanelGroup"
+                                                listener="#{myProjectController.removeGenCompFromTable_Listener()}"/>
+                                    </p:commandButton>
+                                    <p:outputLabel id="deleteButtonLabel2" for="deleteButton2"
+                                                   value="#{bundle.totalSelectedTableFacetLabel} #{myProjectController.deleteListTechComp.size()}"/>
+                                </f:facet>
+                            </p:dataTable>
+
+                        </p:panelGrid>
+                    </p:tab>
+
+                    <p:tab id="Confirm" title="#{bundle.wizarProjectConfirm}">
+
+                        <p:treeTable expandMode="children" value="#{myProjectController.root}" resizableColumns="true"
+                                     liveResize="true" var="nodeT" class="z-depth-1">
+                            <f:facet name="header">
+                                #{bundle.wizarProjectTTHType}
+                            </f:facet>
+
+                            <p:column headerText="#{bundle.wizarProjectTTHType}">
+                                <h:outputText value="#{nodeT.getDisplayName()}"/>
+                            </p:column>
+
+                            <p:column headerText="#{bundle.wizarProjectTTHStructure}">
+                                <h:outputText value="#{nodeT.getStructureName()}"/>
+                            </p:column>
+                            <p:column headerText="#{bundle.wizarProjectTTHProject}">
+                                <h:outputText value="#{nodeT.getProjectName()}"/>
+                            </p:column>
+                            <p:column headerText="#{bundle.wizarProjectTTHRoles}">
+                                <h:outputText value="#{nodeT.getRolesName()}"/>
+                            </p:column>
+                            <p:column headerText="#{bundle.wizarProjectTTHTCompetences}">
+                                <h:outputText value="#{nodeT.getProjectCompetencesName()}"/>
+                            </p:column>
+                        </p:treeTable>
+
+                        <p:commandButton class="z-depth-1" action="#{myProjectController.create()}"
+                                         value="#{bundle.Save}" update=":growl"/>
+
+                    </p:tab>
+
+                </p:wizard>
+                <p:separator style=" box-sizing: content-box"/>
+                <p:commandButton class="z-depth-1" value="#{bundle.Cancel}" immediate="true"
+                                 action="/manageProjects/project/List"/>
+            </h:form>
+        </p:fieldset>
+    </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+
+<!--by jpinas-->
+<ui:composition template="/template/template.xhtml">
+    <ui:define name="body">
+        <h:form id="formConfig">
+            <p:growl id="growl">
+                <p:autoUpdate/>
+            </p:growl>
+            <div class="ui-g-12 ui-fluid">
+                <p:fieldset id="fieldsetConf" legend="#{bundle.label_config}"
+                            styleClass="ui-noborder"> <!--esto pone un fondo blanco-->
+                    <div class="ui-g-12">
+                        <h:panelGrid columns="1" style="margin-bottom: 10px;" styleClass="ui-noborder">
+                            <h:panelGrid columns="3" style="margin-bottom: 10px;" styleClass="ui-noborder">
+                                <p:outputLabel for="spinerPtoCorte" value="#{bundle.label_show_punto_corte}"/>
+                                <p:spinner id="spinerPtoCorte" value="#{configurationController.puntoCorte}"
+                                           min="0.1" max="1.0" stepFactor="0.1">
+                                    <p:ajax process="@this"/>
+                                </p:spinner>
+                                <p:tooltip id="toolTipFocusPto" for="spinerPtoCorte" position="top"
+                                           value="#{bundle.tooltip_punto_corte}"/>
+
+                                <h:outputLabel for="spinnerMaxExp" value="#{bundle.label_numero_anos}"/>
+                                <p:spinner id="spinnerMaxExp" value="#{configurationController.maxExpValue}" min="0"
+                                           max="60">
+                                    <p:ajax process="@this"/>
+                                </p:spinner>
+                                <p:tooltip id="toolTipFocusExp" for="spinnerMaxExp" position="top"
+                                           value="#{bundle.tooltip_xp_maxima}"/>
+                            </h:panelGrid>
+                            <!--===============================================-->
+                            <h:panelGrid columns="3" style="margin-bottom: 10px;" styleClass="ui-noborder">
+                                <p:outputLabel for="update" value="#{bundle.label_update_persons}"/>
+                                <p:selectOneRadio id="update" value="#{configurationController.updateIfExist}">
+                                    <f:selectItem itemLabel="#{bundle.label_ingorar}" itemValue="false"/>
+                                    <f:selectItem itemLabel="#{bundle.label_update_values}" itemValue="true"/>
+                                    <p:ajax process="@this"
+                                            update=":formConfig:fieldsetConf"/>
+                                </p:selectOneRadio>
+                                <p:tooltip id="toolTipFocusUpd" for="update" position="top"
+                                           value="#{bundle.tooltip_update_data}"/>
+
+                                <p:outputLabel id="label_for_old"
+                                               rendered="#{configurationController.updateIfExist}"
+                                               for="actionOldValues"
+                                               value="#{bundle.label_update_persons_old_values}"/>
+                                <p:selectOneRadio id="actionOldValues"
+                                                  rendered="#{configurationController.updateIfExist}"
+                                                  value="#{configurationController.onUpdateDeleteOldValues}">
+                                    <f:selectItem itemLabel="#{bundle.label_keep_old_values}" itemValue="false"/>
+                                    <f:selectItem itemLabel="#{bundle.label_delete_old_values}" itemValue="true"/>
+                                    <p:ajax process="@this"/>
+                                </p:selectOneRadio>
+                                <p:tooltip id="toolTipFocusOld" for="actionOldValues" position="top"
+                                           value="#{bundle.tooltip_delete_on_uptade}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </div>
+                </p:fieldset>
+            </div>
+            <p:commandButton value="#{bundle.Save}" action="import" actionListener="#{configurationController.save()}"/>
+            <p:commandButton value="#{bundle.Cancel}" action="import"
+                             actionListener="#{configurationController.cancel()}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

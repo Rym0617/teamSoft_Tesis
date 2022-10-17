@@ -1,0 +1,149 @@
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+    <ui:composition template="/template/template.xhtml">
+        <ui:define name="body">
+            <h:form>
+                <div class="ui-g ui-fluid">
+                    <div class="ui-g-12">
+                        <p:fieldset>
+                            <br/>
+                            <div class="ui-g-12">
+                                <p:fieldset legend="#{bundle.teamsoft_parameters}">
+                                    <div class="ui-g-6">
+                                        <p:outputLabel style="padding-right: 20px"
+                                                       value="#{bundle.create_init_solution}"/>
+                                        <p:selectOneMenu style="margin-bottom: 10px" id="initialSolution"
+                                                         filter="true" filterMatchMode="contains"
+                                                         panelStyle="width:250px"
+                                                         value="#{algorithmConfController.initialSolutionConf}">
+                                            <c:forEach items="#{algorithmConfController.initialSolutionList}"
+                                                       var="initialSolutionValue" varStatus="initialSolutionIdx">
+                                                <f:selectItem itemLabel="#{initialSolutionValue}"
+                                                              itemValue="#{initialSolutionIdx.index}"/>
+                                            </c:forEach>
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel id="numberPersonTriesLabel" for="numberPersonTries"
+                                                       value="#{bundle.try_number_to_assign}"/>
+                                        <p:spinner id="numberPersonTries"
+                                                   value="#{algorithmConfController.numberPersonTries}" min="1"
+                                                   max="100"/>
+                                    </div>
+
+                                    <div class="ui-g-6">
+                                        <p:outputLabel style="padding-right: 20px" value="#{bundle.operator_to_use}"/>
+                                        <p:selectOneMenu style="margin-bottom: 10px" id="operator"
+                                                         filter="true" filterMatchMode="contains"
+                                                         panelStyle="width:250px"
+                                                         value="#{algorithmConfController.operatorOpc}">
+                                            <c:forEach items="#{algorithmConfController.operatorList}"
+                                                       var="operatorValue" varStatus="operatorIdx">
+                                                <f:selectItem itemLabel="#{operatorValue}"
+                                                              itemValue="#{operatorIdx.index}"/>
+                                            </c:forEach>
+                                            <p:ajax listener="#{algorithmConfController.operatorListChange()}"
+                                                    update="operatorTypeList, operatorTypeLabel"/>
+                                        </p:selectOneMenu>
+                                        <p:outputLabel style="padding-right: 20px" id="operatorTypeLabel"
+                                                       value="#{bundle.operator_of} #{algorithmConfController.operatorTypeLabel}"/>
+                                        <p:selectOneMenu style="margin-bottom: 10px" id="operatorTypeList"
+                                                         filter="true" filterMatchMode="contains"
+                                                         panelStyle="width:250px"
+                                                         disabled="#{algorithmConfController.operatorTypeDisabled()}"
+                                                         value="#{algorithmConfController.operatorTypeOpc}">
+                                            <c:forEach items="#{algorithmConfController.operatorTypeList}"
+                                                       var="operatorTypeValue" varStatus="operatorTypeIdx">
+                                                <f:selectItem itemLabel="#{operatorTypeValue}"
+                                                              itemValue="#{operatorTypeIdx.index}"/>
+                                            </c:forEach>
+                                        </p:selectOneMenu>
+                                    </div>
+                                </p:fieldset>
+                            </div>
+                            <br/>
+                            <div class="ui-g-12">
+                                <div class="ui-g-6">
+                                    <p:outputPanel style="margin-bottom:10px" layout="grid">
+                                        <p:fieldset legend="#{bundle.config_strategy}">
+                                            <p:outputLabel id="executionsLabel" for="executions"
+                                                           value="#{bundle.executions}"/>
+                                            <p:spinner id="executions" min="1" max="100"
+                                                       value="#{algorithmConfController.executions}"/>
+                                            <p:outputLabel id="iterationsLabel" for="iterations"
+                                                           value="#{bundle.iterations}"/>
+                                            <p:spinner id="iterations" min="1" max="100000"
+                                                       value="#{algorithmConfController.iterations}"/>
+                                            <p:selectBooleanCheckbox id="calculateTime"
+                                                                     value="#{algorithmConfController.calculateTime}"/>
+                                            <p:outputLabel for="calculateTime" value="#{bundle.calculate_time}"/>
+                                            <br/>
+                                            <p:selectBooleanCheckbox id="validate"
+                                                                     value="#{algorithmConfController.validate}"/>
+                                            <p:outputLabel for="validate" value="#{bundle.validate }"/>
+                                            <br/>
+                                            <p:outputLabel id="posibleValidateNumberLabel" for="posibleValidateNumber"
+                                                           value="#{bundle.number_state_valid_state}"/>
+                                            <p:spinner id="posibleValidateNumber" min="1" max="100"
+                                                       value="#{algorithmConfController.possibleValidateNumber}"/>
+                                        </p:fieldset>
+                                        <br/>
+                                    </p:outputPanel>
+                                </div>
+
+                                <div class="ui-g-6">
+
+                                    <p:fieldset legend="#{bundle.algorithms_parameters}">
+
+                                        <p:outputLabel id="HillClimbingRestartCountLabel" for="HillClimbingRestartCount"
+                                                       value="#{bundle.iterations_hill_climbing_restart}"/>
+                                        <p:spinner id="HillClimbingRestartCount" min="1" max="100"
+                                                   value="#{algorithmConfController.hillClimbingRestartCount}"/>
+
+                                        <p:outputLabel id="TabuSolutionsMaxelementsLabel" for="TabuSolutionsMaxelements"
+                                                       value="#{bundle.tabu_list_size}"/>
+                                        <p:spinner id="TabuSolutionsMaxelements" min="1" max="100"
+                                                   value="#{algorithmConfController.tabuSolutionsMaxelements}"/>
+
+                                        <p:outputLabel id="MultiobjectiveHCRestartSizeNeighborsLabel"
+                                                       for="MultiobjectiveHCRestartSizeNeighbors"
+                                                       value="#{bundle.tabu_list_neighborhood_size}"/>
+                                        <p:spinner id="MultiobjectiveHCRestartSizeNeighbors" min="1" max="100"
+                                                   value="#{algorithmConfController.multiobjectiveHCRestartSizeNeighbors}"/>
+
+                                        <p:outputLabel id="MultiobjectiveHCDistanceSizeNeighborsLabel"
+                                                       for="MultiobjectiveHCDistanceSizeNeighbors"
+                                                       value="#{bundle.distance_hill_climbing_restart}"/>
+                                        <p:spinner id="MultiobjectiveHCDistanceSizeNeighbors" min="1" max="100"
+                                                   value="#{algorithmConfController.multiobjectiveHCDistanceSizeNeighbors}"/>
+
+                                        <p:outputLabel id="MultiobjectiveTabuSolutionsMaxelementsLabel"
+                                                       for="MultiobjectiveTabuSolutionsMaxelements"
+                                                       value="#{bundle.tabu_multiobjetive_size}"/>
+                                        <p:spinner id="MultiobjectiveTabuSolutionsMaxelements" min="1" max="100"
+                                                   value="#{algorithmConfController.multiobjectiveTabuSolutionsMaxelements}"/>
+                                    </p:fieldset>
+                                </div>
+                            </div>
+                            <br/>
+                            <p:commandButton value="#{bundle.save_changes}"
+                                             actionListener="#{algorithmConfController.save()}"/>
+                        </p:fieldset>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+</ui:composition>

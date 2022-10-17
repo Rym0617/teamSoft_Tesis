@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/template.xhtml">
+
+
+    <ui:define name="top">
+        <p:breadCrumb>
+            <p:menuitem value="Inicio" url="/index.jsf"/>
+            <p:menuitem value="Roles" url="#"/>
+        </p:breadCrumb>
+    </ui:define>
+
+    <ui:define name="title">
+        <h:outputText value="#{bundle.ListRoleTitle}"></h:outputText>
+    </ui:define>
+
+    <ui:define name="body">
+        <h:form id="RoleListForm">
+            <p:panel header="#{bundle.ListRoleTitle}">
+                <p:fileUpload fileUploadListener="#{myRoleController.handleFileUpload}"
+                              mode="advanced"
+                              skinSimple="true" label="#{bundle.import_only_persons_menu}"
+                              allowTypes="/(\.|\/)(csv)$/"
+                              update=":growl,datalist"
+                              auto="true"
+                /> <br/>
+                <p:dataTable id="datalist" value="#{roleController.items}" var="item"
+                             selectionMode="single" selection="#{roleController.selected}"
+                             paginator="true"
+                             rowKey="#{item.id}"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                >
+
+                    <p:ajax event="rowSelect" update="createButton  editButton deleteButton"/>
+                    <p:ajax event="rowUnselect" update="createButton  editButton deleteButton"/>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListRoleTitle_roleName}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.roleName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListRoleTitle_roleDesc}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.roleDesc}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListRoleTitle_impact}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.impact}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.team_leader}"/>
+                        </f:facet>
+                        <p:selectBooleanCheckbox value="#{item.isBoss()}" disabled="true"/>
+                    </p:column>
+                    <f:facet name="footer">
+                        <p:commandButton class="z-depth-1" id="createButton" icon="ui-icon-plus"
+                                         value="#{bundle.Create}" action="#{myRoleController.prepareCreate()}"/>
+                        <p:commandButton class="z-depth-1" id="editButton" icon="ui-icon-pencil" value="#{bundle.Edit}"
+                                         update=":growl,editButton,deleteButton"
+                                         action="#{myRoleController.prepareEdit()}"
+                                         disabled="#{empty roleController.selected}"/>
+                        <p:commandButton class="z-depth-1" id="deleteButton" icon="ui-icon-trash"
+                                         value="#{bundle.Delete}" actionListener="#{roleController.destroy}"
+                                         update=":growl,datalist" disabled="#{empty roleController.selected}"
+                        >
+                            <p:confirm header="#{bundle.confirmation}" message="#{bundle.are_you_sure}" icon="ui-icon-alert"/>
+                        </p:commandButton>
+                    </f:facet>
+                </p:dataTable>
+            </p:panel>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="#{bundle.yesBooleanButton}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                <p:commandButton value="#{bundle.noBooleanButton}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+        </h:form>
+
+
+    </ui:define>
+</ui:composition>
+
+</html>

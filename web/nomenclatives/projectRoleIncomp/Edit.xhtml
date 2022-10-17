@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog id="ProjectRoleIncompEditDlg" widgetVar="ProjectRoleIncompEditDialog" modal="true" resizable="false"
+              appendTo="@(body)" header="#{bundle.EditProjectRoleIncompTitle}">
+        <h:form id="ProjectRoleIncompEditForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{projectRoleIncompController.selected != null}">
+                    <p:outputLabel value="#{bundle.EditProjectRoleIncompLabel_id}" for="id"/>
+                    <p:inputText id="id" value="#{projectRoleIncompController.selected.id}"
+                                 title="#{bundle.EditProjectRoleIncompTitle_id}" required="true"
+                                 requiredMessage="#{bundle.EditProjectRoleIncompRequiredMessage_id}"/>
+                    <p:outputLabel value="#{bundle.EditProjectRoleIncompLabel_cycleFk}" for="cycleFk"/>
+                    <p:selectOneMenu effect="clip" id="cycleFk" value="#{projectRoleIncompController.selected.cycleFk}"
+                                     required="true"
+                                     requiredMessage="#{bundle.EditProjectRoleIncompRequiredMessage_cycleFk}">
+                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                        <f:selectItems value="#{cycleController.itemsAvailableSelectOne}"
+                                       var="cycleFkItem"
+                                       itemValue="#{cycleFkItem}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="#{bundle.EditProjectRoleIncompLabel_roleAFk}" for="roleAFk"/>
+                    <p:selectOneMenu effect="clip" id="roleAFk" value="#{projectRoleIncompController.selected.roleAFk}"
+                                     required="true"
+                                     requiredMessage="#{bundle.EditProjectRoleIncompRequiredMessage_roleAFk}">
+                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                        <f:selectItems value="#{roleController.itemsAvailableSelectOne}"
+                                       var="roleAFkItem"
+                                       itemValue="#{roleAFkItem}" itemLabel="#{roleAFkItem.roleName}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="#{bundle.EditProjectRoleIncompLabel_roleBFk}" for="roleBFk"/>
+                    <p:selectOneMenu effect="clip" id="roleBFk" value="#{projectRoleIncompController.selected.roleBFk}"
+                                     required="true"
+                                     requiredMessage="#{bundle.EditProjectRoleIncompRequiredMessage_roleBFk}">
+                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                        <f:selectItems value="#{roleController.itemsAvailableSelectOne}"
+                                       var="roleBFkItem"
+                                       itemValue="#{roleBFkItem}" itemLabel="#{roleBFkItem.roleName}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" actionListener="#{projectRoleIncompController.update}"
+                                 value="#{bundle.Save}" update="display,:ProjectRoleIncompListForm:datalist,:growl"
+                                 oncomplete="handleSubmit(args, 'ProjectRoleIncompEditDialog');"/>
+                <p:commandButton class="z-depth-1" value="#{bundle.Cancel}"
+                                 onclick="ProjectRoleIncompEditDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

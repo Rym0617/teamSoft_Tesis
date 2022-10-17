@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog closable="false" id="ProjectRolesViewDlg" widgetVar="ProjectRolesViewDialog" modal="true"
+              resizable="false" appendTo="@(body)" header="#{bundle.ViewProjectRolesTitle}">
+        <h:form id="ProjectRolesViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{projectRolesController.selected != null}">
+                    <h:outputText value="#{bundle.ViewProjectRolesLabel_id}"/>
+                    <h:outputText value="#{projectRolesController.selected.id}"
+                                  title="#{bundle.ViewProjectRolesTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewProjectRolesLabel_amountWorkersRole}"/>
+                    <h:outputText value="#{projectRolesController.selected.amountWorkersRole}"
+                                  title="#{bundle.ViewProjectRolesTitle_amountWorkersRole}"/>
+                    <h:outputText value="#{bundle.ViewProjectRolesLabel_projectStructureFk}"/>
+                    <h:outputText value="#{projectRolesController.selected.projectStructureFk}"
+                                  title="#{bundle.ViewProjectRolesTitle_projectStructureFk}"/>
+                    <h:outputText value="#{bundle.ViewProjectRolesLabel_roleFk}"/>
+                    <h:outputText value="#{projectRolesController.selected.roleFk}"
+                                  title="#{bundle.ViewProjectRolesTitle_roleFk}"/>
+                    <h:outputText value="#{bundle.ViewProjectRolesLabel_roleLoadFk}"/>
+                    <h:outputText value="#{projectRolesController.selected.roleLoadFk}"
+                                  title="#{bundle.ViewProjectRolesTitle_roleLoadFk}"/>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" value="#{bundle.Close}" onclick="ProjectRolesViewDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

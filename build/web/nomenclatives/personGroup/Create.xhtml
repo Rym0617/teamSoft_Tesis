@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog id="PersonGroupCreateDlg" closable="false" widgetVar="PersonGroupCreateDialog" modal="true"
+              resizable="false" appendTo="@(body)" header="#{bundle.CreatePersonGroupTitle}">
+        <h:form id="PersonGroupCreateForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{personGroupController.selected != null}">
+                    <p:outputLabel value="#{bundle.CreatePersonGroupLabel_name}" for="name"/>
+                    <p:inputText id="name" value="#{personGroupController.selected.name}"
+                                 title="#{bundle.CreatePersonGroupTitle_name}" required="true"
+                                 requiredMessage="#{bundle.CreatePersonGroupRequiredMessage_name}"/>
+                    <p:outputLabel value="#{bundle.CreatePersonGroupLabel_parentGroup}" for="parentGroup"/>
+                    <p:selectOneMenu effect="clip" id="parentGroup"
+                                     value="#{personGroupController.selected.parentGroup}">
+                        <f:selectItems value="#{personGroupController.itemsAvailableSelectOne}"
+                                       var="parentGroupItem"
+                                       itemValue="#{parentGroupItem}" itemLabel="#{parentGroupItem.name}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" actionListener="#{personGroupController.create}"
+                                 value="#{bundle.Save}" update="display,:PersonGroupListForm:datalist,:growl"
+                                 oncomplete="handleSubmit(args,'PersonGroupCreateDialog');"/>
+                <p:commandButton class="z-depth-1" value="#{bundle.Cancel}" process="@none"
+                                 actionListener="#{personGroupController.close()}"
+                                 onclick="PersonGroupCreateDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

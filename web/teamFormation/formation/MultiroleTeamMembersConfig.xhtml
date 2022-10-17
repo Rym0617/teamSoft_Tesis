@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <div class="ui-g-1">
+                    <p:selectBooleanCheckbox id="takeMultiroleTeamMembers" value="#{tF_StepThreeController.takeMultiroleTeamMembers}">
+                        <f:ajax render="@form"/>
+                    </p:selectBooleanCheckbox></div>
+                <div class="ui-g-11">
+                    <p:outputLabel for="takeMultiroleTeamMembers" value="Maximizar equipos con personas multirol"/>
+                </div>
+            </div>
+            <div class="ui-g-2">
+                <p:spinner id="takeMultiroleTeamMembersWeight" value="#{tF_StepThreeController.multiRoleTeamMembersWeight}" min="0"
+                           max="1" stepFactor="0.01"
+                           disabled="#{!tF_StepThreeController.takeMultiroleTeamMembers}"
+                           rendered="#{tF_StepThreeController.mostrarPesos}">
+                    <p:ajax update="#{p:component('multiRoleTeamMembersWeightLabel')}"/>
+                </p:spinner>
+            </div>
+            <div class="ui-g-4 ui-inputgroup">
+                <p:selectBooleanCheckbox id="BalanceMultiroleTeamMembers" value="#{tF_StepThreeController.balanceMultiroleTeamMembers}"
+                                         disabled="#{not tF_StepThreeController.takeMultiroleTeamMembers and !tF_StepThreeController.haveAnySenseToBalanceObjetiveFunction()}">
+                    <f:ajax render="@form"/>
+                </p:selectBooleanCheckbox>
+                <p:outputLabel for="BalanceMultiroleTeamMembers" value="Balancear equipos con personas multirol"/>
+            </div>
+            <div class="ui-g-2">
+                <p:spinner id="balanceMultiroleTeamMembersWeight" value="#{tF_StepThreeController.balanceMultiRoleTeamMembersWeight}"
+                           min="0" max="1" stepFactor="0.01"
+                           disabled="#{!tF_StepThreeController.balanceMultiroleTeamMembers}"
+                           rendered="#{tF_StepThreeController.mostrarPesos}">
+                    <p:ajax update="#{p:component('multiRoleTeamMembersWeightLabel')}"/>
+                </p:spinner>
+            </div>
+        </div>
+    </div>
+</ui:composition>

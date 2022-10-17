@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog closable="false" id="RoleCompetitionCreateDlg" widgetVar="RoleCompetitionCreateDialog" modal="true"
+              resizable="false" appendTo="@(body)" header="#{bundle.CreateRoleCompetitionTitle}">
+        <h:form id="RoleCompetitionCreateForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{roleCompetitionController.selected != null}">
+                    <p:outputLabel value="#{bundle.CreateRoleCompetitionLabel_id}" for="id"/>
+                    <p:inputText id="id" value="#{roleCompetitionController.selected.id}"
+                                 title="#{bundle.CreateRoleCompetitionTitle_id}" required="true"
+                                 requiredMessage="#{bundle.CreateRoleCompetitionRequiredMessage_id}"/>
+                    <p:outputLabel value="#{bundle.CreateRoleCompetitionLabel_competenceFk}" for="competenceFk"/>
+                    <p:selectOneMenu effect="clip" id="competenceFk"
+                                     value="#{roleCompetitionController.selected.competenceFk}" required="true"
+                                     requiredMessage="#{bundle.EditRoleCompetitionRequiredMessage_competenceFk}">
+                        <f:selectItems value="#{competenceController.itemsAvailableSelectOne}"
+                                       var="competenceFkItem"
+                                       itemValue="#{competenceFkItem}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="#{bundle.CreateRoleCompetitionLabel_compImportanceFk}"
+                                   for="compImportanceFk"/>
+                    <p:selectOneMenu effect="clip" id="compImportanceFk"
+                                     value="#{roleCompetitionController.selected.compImportanceFk}" required="true"
+                                     requiredMessage="#{bundle.EditRoleCompetitionRequiredMessage_compImportanceFk}">
+                        <f:selectItems value="#{competenceImportanceController.itemsAvailableSelectOne}"
+                                       var="compImportanceFkItem"
+                                       itemValue="#{compImportanceFkItem}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="#{bundle.CreateRoleCompetitionLabel_levelsFk}" for="levelsFk"/>
+                    <p:selectOneMenu effect="clip" id="levelsFk" value="#{roleCompetitionController.selected.levelsFk}"
+                                     required="true"
+                                     requiredMessage="#{bundle.EditRoleCompetitionRequiredMessage_levelsFk}">
+                        <f:selectItems value="#{levelsController.itemsAvailableSelectOne}"
+                                       var="levelsFkItem"
+                                       itemValue="#{levelsFkItem}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="#{bundle.CreateRoleCompetitionLabel_rolesFk}" for="rolesFk"/>
+                    <p:selectOneMenu effect="clip" id="rolesFk" value="#{roleCompetitionController.selected.rolesFk}"
+                                     required="true"
+                                     requiredMessage="#{bundle.EditRoleCompetitionRequiredMessage_rolesFk}">
+                        <f:selectItems value="#{roleController.itemsAvailableSelectOne}"
+                                       var="rolesFkItem"
+                                       itemValue="#{rolesFkItem}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" actionListener="#{roleCompetitionController.create}"
+                                 value="#{bundle.Save}" update="display,:RoleCompetitionListForm:datalist,:growl"
+                                 oncomplete="handleSubmit(args,'RoleCompetitionCreateDialog');"/>
+                <p:commandButton class="z-depth-1" value="#{bundle.Cancel}"
+                                 onclick="RoleCompetitionCreateDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

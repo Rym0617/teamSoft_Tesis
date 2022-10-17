@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog closable="false" id="ProjectStructureCycleViewDlg" widgetVar="ProjectStructureCycleViewDialog"
+              modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewProjectStructureCycleTitle}">
+        <h:form id="ProjectStructureCycleViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{projectStructureCycleController.selected != null}">
+                    <h:outputText value="#{bundle.ViewProjectStructureCycleLabel_id}"/>
+                    <h:outputText value="#{projectStructureCycleController.selected.id}"
+                                  title="#{bundle.ViewProjectStructureCycleTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewProjectStructureCycleLabel_cycleFk}"/>
+                    <h:outputText value="#{projectStructureCycleController.selected.cycleFk}"
+                                  title="#{bundle.ViewProjectStructureCycleTitle_cycleFk}"/>
+                    <h:outputText value="#{bundle.ViewProjectStructureCycleLabel_projectStructureFk}"/>
+                    <h:outputText value="#{projectStructureCycleController.selected.projectStructureFk}"
+                                  title="#{bundle.ViewProjectStructureCycleTitle_projectStructureFk}"/>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" value="#{bundle.Close}"
+                                 onclick="ProjectStructureCycleViewDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

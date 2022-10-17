@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog closable="false" id="CycleViewDlg" widgetVar="CycleViewDialog" modal="true" resizable="false"
+              appendTo="@(body)" header="#{bundle.ViewCycleTitle}">
+        <h:form id="CycleViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{cycleController.selected != null}">
+                    <h:outputText value="#{bundle.ViewCycleLabel_id}"/>
+                    <h:outputText value="#{cycleController.selected.id}" title="#{bundle.ViewCycleTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewCycleLabel_beginDate}"/>
+                    <h:outputText value="#{cycleController.selected.beginDate}"
+                                  title="#{bundle.ViewCycleTitle_beginDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewCycleLabel_endDate}"/>
+                    <h:outputText value="#{cycleController.selected.endDate}" title="#{bundle.ViewCycleTitle_endDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewCycleLabel_projectFk}"/>
+                    <h:outputText value="#{cycleController.selected.projectFk}"
+                                  title="#{bundle.ViewCycleTitle_projectFk}"/>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" value="#{bundle.Close}" onclick="CycleViewDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

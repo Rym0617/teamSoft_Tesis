@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <div class="ui-g-1">
+                    <p:selectBooleanCheckbox id="takeCostDistance" value="#{tF_StepThreeController.takeCostDistance}">
+                        <f:ajax render="@form"/>
+                    </p:selectBooleanCheckbox></div>
+                <div class="ui-g-11">
+                    <p:outputLabel for="takeCostDistance" value="#{bundle.minimize_telecommuting}"/>
+                </div>
+            </div>
+            <div class="ui-g-2">
+                <p:spinner id="takeCostDistanceWeight" value="#{tF_StepThreeController.costDistanceWeight}" min="0"
+                           max="1" stepFactor="0.01"
+                           disabled="#{!tF_StepThreeController.takeCostDistance}"
+                           rendered="#{tF_StepThreeController.mostrarPesos}">
+                    <p:ajax update="#{p:component('costDistanceWeightLabel2')}"/>
+                </p:spinner>
+            </div>
+            <div class="ui-g-4 ui-inputgroup">
+                <p:selectBooleanCheckbox id="BalanceCostDistance" value="#{tF_StepThreeController.balanceCostDistance}"
+                                         disabled="#{not tF_StepThreeController.takeCostDistance and !tF_StepThreeController.haveAnySenseToBalanceObjetiveFunction()}">
+                    <f:ajax render="@form"/>
+                </p:selectBooleanCheckbox>
+                <p:outputLabel for="BalanceCostDistance" value="#{bundle.balance_between_teams}"/>
+            </div>
+            <div class="ui-g-2">
+                <p:spinner id="balanceCostDistanceWeight" value="#{tF_StepThreeController.balanceCostDistanceWeight}"
+                           min="0" max="1" stepFactor="0.01"
+                           disabled="#{!tF_StepThreeController.balanceCostDistance}"
+                           rendered="#{tF_StepThreeController.mostrarPesos}">
+                    <p:ajax update="#{p:component('costDistanceWeightLabel2')}"/>
+                </p:spinner>
+            </div>
+        </div>
+    </div>
+</ui:composition>

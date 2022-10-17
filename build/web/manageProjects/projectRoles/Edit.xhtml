@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog closable="false" id="ProjectRolesEditDlg" widgetVar="ProjectRolesEditDialog" modal="true"
+              resizable="false" appendTo="@(body)" header="#{bundle.EditProjectRolesTitle}">
+        <h:form id="ProjectRolesEditForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{projectRolesController.selected != null}">
+                    <p:outputLabel value="#{bundle.EditProjectRolesLabel_id}" for="id"/>
+                    <p:inputText id="id" value="#{projectRolesController.selected.id}"
+                                 title="#{bundle.EditProjectRolesTitle_id}" required="true"
+                                 requiredMessage="#{bundle.EditProjectRolesRequiredMessage_id}"/>
+                    <p:outputLabel value="#{bundle.EditProjectRolesLabel_amountWorkersRole}" for="amountWorkersRole"/>
+                    <p:inputText id="amountWorkersRole" value="#{projectRolesController.selected.amountWorkersRole}"
+                                 title="#{bundle.EditProjectRolesTitle_amountWorkersRole}" required="true"
+                                 requiredMessage="#{bundle.EditProjectRolesRequiredMessage_amountWorkersRole}"/>
+                    <p:outputLabel value="#{bundle.EditProjectRolesLabel_projectStructureFk}" for="projectStructureFk"/>
+                    <p:selectOneMenu effect="clip" id="projectStructureFk"
+                                     value="#{projectRolesController.selected.projectStructureFk}" required="true"
+                                     requiredMessage="#{bundle.EditProjectRolesRequiredMessage_projectStructureFk}">
+                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                        <f:selectItems value="#{projectStructureController.itemsAvailableSelectOne}"
+                                       var="projectStructureFkItem"
+                                       itemValue="#{projectStructureFkItem}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="#{bundle.EditProjectRolesLabel_roleFk}" for="roleFk"/>
+                    <p:selectOneMenu effect="clip" id="roleFk" value="#{projectRolesController.selected.roleFk}"
+                                     required="true" requiredMessage="#{bundle.EditProjectRolesRequiredMessage_roleFk}">
+                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                        <f:selectItems value="#{roleController.itemsAvailableSelectOne}"
+                                       var="roleFkItem"
+                                       itemValue="#{roleFkItem}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="#{bundle.EditProjectRolesLabel_roleLoadFk}" for="roleLoadFk"/>
+                    <p:selectOneMenu effect="clip" id="roleLoadFk" value="#{projectRolesController.selected.roleLoadFk}"
+                                     required="true"
+                                     requiredMessage="#{bundle.EditProjectRolesRequiredMessage_roleLoadFk}">
+                        <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                        <f:selectItems value="#{roleLoadController.itemsAvailableSelectOne}"
+                                       var="roleLoadFkItem"
+                                       itemValue="#{roleLoadFkItem}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" actionListener="#{projectRolesController.update}"
+                                 value="#{bundle.Save}" update="display,:ProjectRolesListForm:datalist,:growl"
+                                 oncomplete="handleSubmit(args, 'ProjectRolesEditDialog');"/>
+                <p:commandButton class="z-depth-1" value="#{bundle.Cancel}" onclick="ProjectRolesEditDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

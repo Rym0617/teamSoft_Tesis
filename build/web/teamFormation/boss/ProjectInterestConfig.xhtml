@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-6">
+                <div class="ui-g-1">
+                    <p:selectBooleanCheckbox id="takeProjectInterest"
+                                             value="#{tF_StepTwoController.takeProjectInterests}">
+                        <f:ajax render="@form"/>
+                    </p:selectBooleanCheckbox>
+                </div>
+
+                <div class="ui-g-11">
+                    <p:outputLabel for="takeProjectInterest" value="#{bundle.teamProjectInterestOption}"/>
+                </div>
+
+            </div>
+            <div class="ui-g-1">
+                <p:outputLabel for="projectInterestWeight" value="#{bundle.projectWeight}"/>
+            </div>
+            <div class="ui-g-3">
+                <p:spinner id="projectInterestWeight" value="#{tF_StepTwoController.projectInterestWeight}" min="0"
+                           max="#{tF_StepTwoController.higherProjectInterestWeight()}" stepFactor="0.01"
+                           disabled="#{!tF_StepTwoController.takeProjectInterests}">
+                    <p:ajax event="change" process="projectInterestWeight"
+                            update="projectInterestWeight,#{p:component('projectInterestLabel')}"/>
+                </p:spinner>
+            </div>
+            <div class="ui-g-12 ">
+                <div class="ui-g-10">
+                    <div class="ui-g-12 ">
+                        <div class="ui-g-7" style="padding-left: unset">
+                            <p:selectBooleanCheckbox id="TeamInterestRestriction"
+                                                     value="#{tF_StepTwoController.bossTeamInterest}">
+                                <f:ajax render="@form"/>
+                            </p:selectBooleanCheckbox>
+
+                            <p:outputLabel for="TeamInterestRestriction"
+                                           value="#{bundle.bossTeamInterestRestrictionOption}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ui:composition>

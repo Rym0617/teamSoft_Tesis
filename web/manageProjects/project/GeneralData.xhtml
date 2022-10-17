@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+    <p:panelGrid columns="1" layout="grid">
+        <p:panelGrid columns="8" styleClass="ui-panelgrid-blank" layout="grid">
+            <p:outputLabel value="#{bundle.CreateProjectLabel_projectName}" for="projectName"/>
+            <p:inputText id="projectName" value="#{projectController.selected.projectName}"
+                         title="#{bundle.CreateProjectTitle_projectName}" required="true"
+                         requiredMessage="#{bundle.CreateProjectRequiredMessage_projectName}"/>
+            <p:outputLabel value="#{bundle.CreateProjectLabel_initialDate}" for="initialDate"/>
+
+            <p:calendar readonlyInput="true" placeholder="dd-mm-yyyy" effect="drop" pattern="dd/MM/yyyy"
+                        navigator="true" id="initialDate" mask="true" maxdate="#{projectController.selected.endDate}"
+                        value="#{projectController.selected.initialDate}" title="#{bundle.EditProjectTitle_initialDate}"
+                        required="true" requiredMessage="#{bundle.EditProjectRequiredMessage_initialDate}"/>
+
+            <p:outputLabel value="#{bundle.CreateProjectLabel_clientEntityFk}" for="clientEntityFk"/>
+            <p:selectOneMenu effect="clip" id="clientEntityFk" value="#{projectController.selected.clientEntityFk}"
+                             filter="true" filterMatchMode="contains" required="true"
+                             requiredMessage="#{bundle.EditProjectRequiredMessage_clientEntityFk}">
+                <f:selectItem itemLabel="#{bundle.selectOnePlaceHolder}"/>
+                <f:selectItems value="#{clientEntityController.itemsAvailableSelectOne}"
+                               var="clientEntityFkItem"
+                               itemValue="#{clientEntityFkItem}"
+                               itemLabel="#{clientEntityFkItem.entityName}"/>
+            </p:selectOneMenu>
+            <p:outputLabel value="#{bundle.CreateProjectLabel_provinceFk}" for="provinceFk"/>
+            <p:selectOneMenu effect="clip" id="provinceFk" value="#{projectController.selected.provinceFk}"
+                             filter="true" filterMatchMode="contains" required="true"
+                             requiredMessage="#{bundle.EditProjectRequiredMessage_provinceFk}">
+                <f:selectItem itemLabel="#{bundle.selectOnePlaceHolder}"/>
+                <f:selectItems value="#{countyController.itemsAvailableSelectOne}"
+                               var="provinceFkItem"
+                               itemValue="#{provinceFkItem}"
+                               itemLabel="#{provinceFkItem.countyName}"/>
+            </p:selectOneMenu>
+
+        </p:panelGrid>
+    </p:panelGrid>
+
+</ui:composition>
+

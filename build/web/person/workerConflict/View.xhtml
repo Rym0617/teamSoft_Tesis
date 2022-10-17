@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog closable="false" id="WorkerConflictViewDlg" widgetVar="WorkerConflictViewDialog" modal="true"
+              resizable="false" appendTo="@(body)" header="#{bundle.ViewWorkerConflictTitle}">
+        <h:form id="WorkerConflictViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{workerConflictController.selected != null}">
+                    <h:outputText value="#{bundle.ViewWorkerConflictLabel_id}"/>
+                    <h:outputText value="#{workerConflictController.selected.id}"
+                                  title="#{bundle.ViewWorkerConflictTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewWorkerConflictLabel_indexFk}"/>
+                    <h:outputText value="#{workerConflictController.selected.indexFk}"
+                                  title="#{bundle.ViewWorkerConflictTitle_indexFk}"/>
+                    <h:outputText value="#{bundle.ViewWorkerConflictLabel_workerConflictFk}"/>
+                    <h:outputText value="#{workerConflictController.selected.workerConflictFk}"
+                                  title="#{bundle.ViewWorkerConflictTitle_workerConflictFk}"/>
+                    <h:outputText value="#{bundle.ViewWorkerConflictLabel_workerFk}"/>
+                    <h:outputText value="#{workerConflictController.selected.workerFk}"
+                                  title="#{bundle.ViewWorkerConflictTitle_workerFk}"/>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" value="#{bundle.Close}" onclick="WorkerConflictViewDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+    <p:dialog id="LevelsViewDlg" widgetVar="LevelsViewDialog" modal="true" resizable="false" appendTo="@(body)"
+              header="#{bundle.ViewLevelsTitle}">
+        <h:form id="LevelsViewForm">
+            <h:panelGroup id="display">
+                <p:panelGrid columns="2" rendered="#{levelsController.selected != null}">
+                    <h:outputText value="#{bundle.ViewLevelsLabel_levels}"/>
+                    <h:outputText value="#{levelsController.selected.levels}" title="#{bundle.ViewLevelsTitle_levels}"/>
+                    <h:outputText value="#{bundle.ViewLevelsLabel_significance}"/>
+                    <h:outputText value="#{levelsController.selected.significance}"
+                                  title="#{bundle.ViewLevelsTitle_significance}"/>
+                </p:panelGrid>
+                <p:commandButton class="z-depth-1" value="#{bundle.Close}" onclick="LevelsViewDialog.hide()"/>
+            </h:panelGroup>
+        </h:form>
+    </p:dialog>
+
+</ui:composition>
+</html>
